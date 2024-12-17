@@ -107,3 +107,10 @@ The application comprises several components that work together to provide an in
 - Groq: very fast and free llama3.3 endpoint based on LPUs
 - LPU: fancy chips that run models very fast
 
+## References
+https://github.com/ishu-codes/vedanta/
+https://github.com/codebyyashvi/SIH
+https://github.com/S0L009/COMIC-IFY_OneAPI
+https://github.com/kiriland/YHack2024
+https://devpost.com/software/chatedu-0k4dgx
+https://github.com/suno-ai/bark.git
