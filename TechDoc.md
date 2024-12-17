@@ -9,6 +9,7 @@ It allows users to curate notebooks containing a wide variety of resources, incl
 1. **Notebook Creation and Management**
    - Users can create and organize notebooks, uploading and managing a variety of materials such as:
      - PDF files
+     - Picture(.jpeg, .png, .jpg, .svg, .gif)
      - Markdown/text/LaTeX/Source Code files
      - YouTube video links
      - Raw MP4/MP3 files
