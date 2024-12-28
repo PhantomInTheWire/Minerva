@@ -27,5 +27,5 @@ jobs:
 
    # Step 4: Tear Down the Services
     - name: Tear Down Services
-      run: docker-compose down
+      run: docker compose down
 
