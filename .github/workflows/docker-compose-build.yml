@@ -23,7 +23,7 @@ jobs:
 
     # Step 3: Build and Start Services with Docker Compose
     - name: Build and Run Services
-      run: docker-compose up --build -d
+      run: docker compose up --build -d
 
    # Step 4: Tear Down the Services
     - name: Tear Down Services
