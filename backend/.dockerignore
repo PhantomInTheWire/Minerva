@@ -9,7 +9,7 @@ __pycache__/
 *.log
 
 # Ignore virtual environments
-venv/
+.venv/
 env/
 
 # Ignore Docker-specific files
