@@ -1,0 +1,23 @@
+# Ignore Python cache files and directories
+__pycache__/
+*.py[cod]
+
+# Ignore environment files
+.env
+
+# Ignore logs
+*.log
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore Docker-specific files
+Dockerfile
+docker-compose.yml
+
+# Ignore anything not needed for the build
+*.bak
+*.swp
+*.tmp
+
