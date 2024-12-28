@@ -8,7 +8,6 @@ services:
       - "127.0.0.1:8000:8000"
     depends_on:
       - redis
-      - db
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
 
@@ -17,6 +16,8 @@ services:
       context: ./frontend
     ports:
       - "3000:3000"
+    depends_on:
+      - backend
 
   redis:
     image: redis:latest
@@ -25,6 +26,8 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "127.0.0.1:6379:6379"
+    depends_on:
+      - db
 
   db:
     image: postgres:latest
