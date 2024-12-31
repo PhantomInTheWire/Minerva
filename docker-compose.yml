@@ -7,8 +7,11 @@ services:
     depends_on:
       - redis
       - db
+      - minio
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
 
   frontend:
     build:
@@ -35,6 +38,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  minio:
+    image: minio/minio:latest
+    command: server /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+    volumes:
+      - minio_data:/data
+
 volumes:
   postgres_data:
-
+  minio_data:
