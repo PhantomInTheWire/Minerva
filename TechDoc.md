@@ -66,7 +66,7 @@ The application comprises several components that work together to provide an in
 2. **AI Interaction**
 - **Question Answering Agent**: Provides concise and relevant responses to user queries.(based on the lightRAG or LazyRag Approach, probably have to implement the whole thing in rust cause raw python implementations are performance bottlenecks)
 - **Quiz Generation Agent**: Designs customized quizzes based on user materials.
-- **Slide/Video Generation Agent**: Generates slides or video lectures tailored to specific topics.(slides must be generated using COMIC-ify service)
+- **Slide/Video Generation Agent**: Generates video lectures tailored to specific topics. The videos will be FIRESHIP style
 - **Flashcard Creation Agent**: Produces flashcards optimized for memorization.(same use comic-ify service)
 - **Roadmap Agent**: Creates personalized learning roadmaps and visually appealing mind maps.(must be created in three visual formats, MarkMap, excalidraw and mermaid)
 - **Mindmap Agent**: Creates mindmaps based on uploaded notes/resources.(same as roadmap 3 visuals)
@@ -87,16 +87,47 @@ The application comprises several components that work together to provide an in
 
 ### Phase 1: Core Functionality
 
+#### Phase 1.1: Basic Chat Infrastructure
 1. Build the notebook creation and material categorization system.
-2. Build the LightRAG/LazyGraphRag prototype using existing implementation
-3. Set up PostgreSQL database to store and manage user materials.
-4. Develop AI agent functionality for querying and basic question answering using different RAG techniques.
-5. Develop Sectional Overview
-	- GraphQL for nested Query ({text, summary, quiz, more text ....})
-6. Quiz should have basic single correct and multiple correct type questions 
-7. Basic UI and Simple Animations
-8. Internet access agent(serper api)
-9. Deploy on vps using coolify or some other alternative
+2. Enable preprocessing methods to convert regular text into markdown semantically. 
+3. Build the LightRAG/LazyGraphRag prototype using existing implementation
+4. Set up PostgreSQL database to store and manage user materials.
+5. Develop AI agent functionality for querying and basic question answering using different RAG techniques.
+4. Extend text upload to virtually any file type that can be converted to
+txt
+
+#### Phase 1.2: Better Chat and AI Overview
+1. For files in pdf format or pdf friendly formats(like .docx or .pptx) 
+add a different pre processing layer that semantically converts them into markdown.
+
+2. Develop Sectional Overview
+	- GraphQL for nested Query ({text, summary, sectional quiz, more text ....}, look at the diagrams and wiremesh for broader idea)
+
+   - It should look very nice and have a optional chat bot pop up on the right/left side bar that can take into context anything the user selects and doubts
+
+#### Phase 1.3: Quiz Engines and personalisation
+1. Genere Quiz based on uploaded content
+   - should include single correct and multiple correct questions
+   - It should have context on the kind of questions that the user got correct or wrong in the overview section
+   - A detailed analysis report/ dash board is expected.
+   - A lot of this can be outsorced to n8n selfhosted platform.
+   - Anything the user gets wrong must be stoed for future reference by other services(quiz service itself, overview service |might highlight important parts| or the video generation service.)
+
+#### Phase 1.4: Extending Chat interface
+1. Add an AI agent workflow with acess to open internet
+   - serper with google api or opensourced perplexity alts
+   - acess to reddit via google/serper search apis
+   - acess to youtube search
+   - all of this workflow can be outsorced to a self hosted n8n 
+
+#### Phase 1.5: Deploy
+1. Try deploying to a self hosted VPS using coolify
+   - configure the existing ci/cd github actions pipeline
+   - add telegram/email bots for notifications
+   - probably use gcp or azure(aws ui looks horrible and digital ocean doesn't have a free tier)
+   - figure out how to deal with minerva docker-compose madness
+   - figure out how to deal with n8n docker-compose madness
+   - if lucky combine the two into a single docker-compose or k8 cluster
 
 ### Phase 2: Advanced Features
 
@@ -107,7 +138,8 @@ The application comprises several components that work together to provide an in
 	- Users mistakes will appear in a separate analysis section for review and revision.
 	- eye candy Stats page in analytics section
 	- this data will then be given to other services like roadmap, flash cards, videos.
-4. Implement slide and video generation with comicify so it looks crazy.(refer diagrams for details)
+4. Implement video generation with fireship style so it looks crazy.(<del>refer diagrams for details</del>)
+   - https://youtu.be/_rGXIXyNqpk?si=Yo-IOXu5Fjvn_Lh7
 5. Develop visualization roadmaps and mind map tools using Mermaid.js, MarkMap, excalidraw etc.
 6. Crazy smooth and slick Animations
 
@@ -136,5 +168,5 @@ The application comprises several components that work together to provide an in
 - [YHack2024](https://github.com/kiriland/YHack2024)
 - [ChatEdu](https://devpost.com/software/chatedu-0k4dgx)
 - [Bark AI](https://github.com/suno-ai/bark.git)
-
-
+- [n8n] (https://github.com/n8n-io/n8n)
+- [n8n setup] (https://www.youtube.com/watch?v=V_0dNE-H2gw)
