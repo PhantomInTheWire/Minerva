@@ -45,44 +45,50 @@ Minerva is an AI-driven learning platform leveraging advanced RAG techniques and
 The application comprises several components that work together to provide an intelligent and interactive learning experience:
 
 - **Frontend**: ReactJS and NextJS
+
 - **Backend**:
-	- FastAPI/Python for AI stuff
-	- Actix/rust crates for performance intensive video and data processing tasks
-	- nodejs and expressjs/nestjs for excalidraw integration. 
-	- Golang cause Priyanshu
+   - An event driven polygot microservice architechture
+      - FastAPI/Python for AI stuff
+      - Actix/rust crates for performance intensive video and data processing tasks
+      - nodejs and expressjs/nestjs for excalidraw integration. 
+      - Golang cause Priyanshu
 
 - **Database**:
 	- PostgreSQL for storing categorized learning materials
 	- Redis for caching
-	- RedisJSON for any random noSQL usecase
 	- redis streams for Event Driven Queues
-- **AI/ML Framework**: combination of different llms including but limited to gemini-2.0-flash(regular and thinking), gemini-1.5-pro, llama3.3(groq), deepseek-v3 depending on speed and task complexity
-- **Visualization Tools**: Integration of Mermaid.js and PlantUML for rendering visual elements.
+
+- **AI/ML Framework**: combination of different llms including but limited to gemini-2.0-flash(regular and thinking), gemini-1.5-pro, llama3.3(groq), deepseek-v3. The choice varies depending on speed and task complexity as well as context windows
 
 ### High-Level Workflow
 
 1. **Data Ingestion**
     - Users upload learning materials, which are categorized and stored in the PostgreSQL database.
+
 2. **AI Interaction**
-- **Question Answering Agent**: Provides concise and relevant responses to user queries.(based on the lightRAG or LazyRag Approach, probably have to implement the whole thing in rust cause raw python implementations are performance bottlenecks)
-- **Quiz Generation Agent**: Designs customized quizzes based on user materials.
-- **Slide/Video Generation Agent**: Generates video lectures tailored to specific topics. The videos will be FIRESHIP style
-- **Flashcard Creation Agent**: Produces flashcards optimized for memorization.(same use comic-ify service)
-- **Roadmap Agent**: Creates personalized learning roadmaps and visually appealing mind maps.(must be created in three visual formats, MarkMap, excalidraw and mermaid)
-- **Mindmap Agent**: Creates mindmaps based on uploaded notes/resources.(same as roadmap 3 visuals)
-- **Research Agent**: An agent that can access the internet, any of the other agents can call this if they find their context lacking and ask for direction.(probably deepseek v3/ groq llama 3.3 and serper api)
+   - **Question Answering Agent**: Provides concise and relevant responses to user queries.(based on the lightRAG or LazyRag Approach, probably have to implement the whole thing in rust cause raw python implementations are performance bottlenecks)
+   - **Quiz Generation Agent**: Designs customized quizzes based on user materials.
+   - **Slide/Video Generation Agent**: Generates video lectures tailored to specific topics. The videos will be FIRESHIP style
+   - **Flashcard Creation Agent**: Produces flashcards optimized for memorization.(same use comic-ify service)
+   - **Roadmap Agent**: Creates personalized learning roadmaps and visually appealing mind maps.(must be created in three visual formats, MarkMap, excalidraw and mermaid)
+   - **Mindmap Agent**: Creates mindmaps based on uploaded notes/resources.(same as roadmap 3 visuals)
+   - **Research Agent**: An agent that can access the internet, any of the other agents can call this if they find their context lacking and ask for direction.(probably deepseek v3/ groq llama 3.3 and serper api)
+
 3. **Subject Overview**
-	- Detailed notes created from user uploaded contents(essentially users own notes but slightly more verbose and pretty eye candy 🤩!)
+	- Detailed notes created from user uploaded contents(essentially users own notes but slightly more verbose and very eye candy!)
 	- Sectional Revision points
 	- Sectional Quiz
-1. . **Collaboration and Sharing**
+
+4. . **Collaboration and Sharing**
     - Shared notebooks enable multiple users to contribute and collaborate effectively.
-2. **Visualization**
+
+5. **Visualization**
     - Mind maps and roadmaps are dynamically generated using Mermaid.js and PlantUML, providing a clear overview of topics and their relationships.
 
 ## Diagrams
 ![alt text](diagrams/image.png)
 ![alt text](diagrams/image-1.png)
+
 ## Development Plan
 
 ### Phase 1: Core Functionality
