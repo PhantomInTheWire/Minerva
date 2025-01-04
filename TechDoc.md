@@ -88,6 +88,7 @@ The application comprises several components that work together to provide an in
 ### Phase 1: Core Functionality
 
 #### Phase 1.1: Basic Chat Infrastructure
+
 1. Build the notebook creation and material categorization system.
 2. Enable preprocessing methods to convert regular text into markdown semantically. 
 3. Build the LightRAG/LazyGraphRag prototype using existing implementation
@@ -97,15 +98,19 @@ The application comprises several components that work together to provide an in
 txt
 
 #### Phase 1.2: Better Chat and AI Overview
-1. For files in pdf format or pdf friendly formats(like .docx or .pptx) 
-add a different pre processing layer that semantically converts them into markdown.
+
+1. Implement better preprocessing
+   - For files in pdf format (or pdf friendly formats like .docx or .pptx) add a different pre processing layer that semantically converts them into markdown and JSON for llm processing.
+   - This will be useful for designing the next overview feature
 
 2. Develop Sectional Overview
-	- GraphQL for nested Query ({text, summary, sectional quiz, more text ....}, look at the diagrams and wiremesh for broader idea)
-
-   - It should look very nice and have a optional chat bot pop up on the right/left side bar that can take into context anything the user selects and doubts
+   - Organize and optimize the markdown using smaller specialized models and make it look eye candy on the frontend.
+   - Add sectional quizes and revision checkpoints etc to help track user progress.
+	- The API for this would be GraphQL instead of REST since this is something that must be queried on demand as the contents being retrieved can be large, and the query responds with  nested JSON objects.
+   - It should have a optional chat bot pop up on the right/left side bar that can take into context anything the user selects and doubts
 
 #### Phase 1.3: Quiz Engines and personalisation
+
 1. Genere Quiz based on uploaded content
    - should include single correct and multiple correct questions
    - It should have context on the kind of questions that the user got correct or wrong in the overview section
@@ -114,13 +119,15 @@ add a different pre processing layer that semantically converts them into markdo
    - Anything the user gets wrong must be stoed for future reference by other services(quiz service itself, overview service |might highlight important parts| or the video generation service.)
 
 #### Phase 1.4: Extending Chat interface
+
 1. Add an AI agent workflow with acess to open internet
    - serper with google api or opensourced perplexity alts
    - acess to reddit via google/serper search apis
    - acess to youtube search
-   - all of this workflow can be outsorced to a self hosted n8n 
+   - all of this workflow can be outsorced to a self hosted n8n
 
 #### Phase 1.5: Deploy
+
 1. Try deploying to a self hosted VPS using coolify
    - configure the existing ci/cd github actions pipeline
    - add telegram/email bots for notifications
@@ -131,21 +138,91 @@ add a different pre processing layer that semantically converts them into markdo
 
 ### Phase 2: Advanced Features
 
-1.  User Auth
-2. Optimize the RAG pipeline(+probably add neo4j if not already)
-3. Implement advanced quiz generation and performance analysis.
+#### Phase 2.1: Lazy Graph RAG Optimization
+1. Make the RAG go fast
+   - Implement neo4j integration for graph databses
+   - Optimize semantic chunking and retrival strategies
+   - Add a caching layer with Redis for frequent queries
+
+2. Implement query optimization
+   - Improve prompt button to improve user prompts
+   - use groq with mixtral or llama 8b param model for this
+   - make it smooth by using response streaming
+
+#### Phase 2.2: Quiz Generation
+
+1. Implement advanced quiz generation and performance analysis.
 	- the questions user gets wrong in review section or quiz section will be permanently stored for review
 	- Users mistakes will appear in a separate analysis section for review and revision.
 	- eye candy Stats page in analytics section
 	- this data will then be given to other services like roadmap, flash cards, videos.
-4. Implement video generation with fireship style so it looks crazy.(<del>refer diagrams for details</del>)
-   - https://youtu.be/_rGXIXyNqpk?si=Yo-IOXu5Fjvn_Lh7
-5. Develop visualization roadmaps and mind map tools using Mermaid.js, MarkMap, excalidraw etc.
-6. Crazy smooth and slick Animations
+
+#### Phase 2.3: Legacy Video Generation
+
+1. Vedanta
+   - add legacy vedanta code as a microservice to this
+   - use moviepy and opencv to add effects, transitions etc to improve the experience
+   - try to switch from google cloud tts to a whatever is faster and has decent quality out of unofficial tiktok tts api, turtle, suno.ai(bark2)
+
+2. COMIC-ify
+   - implement the comicify service(check github link in references)
+   - improve upon existing codebase by shifiting from static themes to comic-ify generated themes
+
+#### Phase 2.4: Flash Card Generation
+
+1. Spaced Repetion
+   - Implement ai based algo for spaced repetion based flashcards
+   - [What is space repetion?](https://ncase.me/remember/)
+   - [Open Spaced Repo](https://github.com/open-spaced-repetition)
+   - [spaced](https://github.com/lipanski/spaced)
+
+2. Make them look good
+   - either implement comic-ify or some other method to make them look good
+
+#### Phase 2.5: New Video Generation Paradigmn
+
+1. Implement video generation with fireship style for genz attention spans
+   - [fireship](https://youtu.be/_rGXIXyNqpk?si=Yo-IOXu5Fjvn_Lh7)
+   - Use movie.py and openv for custom filters and effects
+   - [neural nine video editing tutorial] (https://www.youtube.com/watch?v=Q2d1tYvTjRw)
+
+
+#### Phase 2.6: MindMaps and FlowCharts
+
+1. Generate Traditional MarkMap based mindmaps
+   - they look like mind maps on whimsical
+   - make sure the ui looks good
+
+2. Generate MindMaps and FlowCharts that look hand drawn
+   - Generate them in mermaid
+   - conver to excalidraw json like objects
+   - embed excalidraw board on the frontend
+   - render in excalidraw board
+
+3. Give the user ability to generate these in 2 ways
+   1. prompting in context of uploaded documents
+      - the user prompts the ai agent that generated and renders the mind map in whatever way they wany in context of uploaded documents
+      - this query will be analyzed using Lazy RAG
+
+   2. Visualise their own notes
+      - The user picks one of their uploaded files and explores a full blown mind map of it
+      - It can be either whimsical like using MarkMap or handwritten using excalidraw
+      - The user can choose this based on their preference
+
+   3. Resources:
+      - [medium blog on MarkMap](https://medium.com/@pedro.aquino.se/how-to-build-mcp-servers-with-fastmcp-step-by-step-tutorial-for-beginners-0a6ddd1d3f95#id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6ImFiODYxNGZmNjI4OTNiYWRjZTVhYTc5YTc3MDNiNTk2NjY1ZDI0NzgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIyMTYyOTYwMzU4MzQtazFrNnFlMDYwczJ0cDJhMmphbTRsamRjbXMwMHN0dGcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTM0NjkyNjM0NDU2ODYxNDY4MTMiLCJlbWFpbCI6ImthcmFubG9rY2hhbmRhbmlAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTczNTg4NDM1MSwibmFtZSI6IkthcmFuIExva2NoYW5kYW5pIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0owLWw1aVBDM1ltNVc2MDI0cF9NV3VnRVh2NEg3cHREVXV2V3BKY2VOZVJRWWcxWTRKPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkthcmFuIiwiZmFtaWx5X25hbWUiOiJMb2tjaGFuZGFuaSIsImlhdCI6MTczNTg4NDY1MSwiZXhwIjoxNzM1ODg4MjUxLCJqdGkiOiIwY2E4OGIxNDY4NTJiOTQ1OWIxNjAwODEyMTZjNzViMzk0YWQ0OWEzIn0.dNMPd_3u3xQZfEMJnnH7AB43ylzWFIgM_lxiS7ftRKxGKy6DnUhNILcOH1lJqPEFvUCpiMAmGFZw5mkEEWWXJRpNPjglkNHDonOgts3lp5bBZa6XMJYfmK6EAef-9w1qHBM1AQfvwu-V2Exenns68dSMM13Yl78-eiEl8a_iybRoV0dYh5gUh56b6Ob_v9Papfl1HywhFAIpa64p_AtZiExHcruAH6Mf5GiJpKLdUq3YiGDdMX2xCVI6Q1XSB88tlFz6CjiOpAMq4v75OeD7w22XRb8z6LlYEm_sUrw0uN1GB_DKaA52pgmX8bZPtfw7-zvXrJLM_8Opf7aEVN0UTA)
+      - [Excalidraw Docs](https://docs.excalidraw.com/) - Hand-drawn style diagrams
+      - [Excalidraw Python](https://pypi.org/project/Excalidraw-Interface/) - Python interface for Excalidraw
+      - [Local AI Stack](https://blog.det.life/your-machine-your-ai-the-ultimate-local-productivity-stack-with-ollama-7a118f271479) - Ollama integration guide
+      - [MarkMap Editor](https://markmap.js.org/repl) - Mind mapping tool
+
 
 ### Phase 3: Enhancements
 
-1. Add collaboration features for sharing notebooks.
+1. User Auth
+2. Add collaboration features for sharing notebooks.
+3. Add elastisearch to let user perform advanced keyword searches on the uploaded as well as generated data
+
 ### Phase 4: Dream
 
 1. react native mobile and electron desktop apps or maybe swift ui?
@@ -168,5 +245,5 @@ add a different pre processing layer that semantically converts them into markdo
 - [YHack2024](https://github.com/kiriland/YHack2024)
 - [ChatEdu](https://devpost.com/software/chatedu-0k4dgx)
 - [Bark AI](https://github.com/suno-ai/bark.git)
-- [n8n] (https://github.com/n8n-io/n8n)
-- [n8n setup] (https://www.youtube.com/watch?v=V_0dNE-H2gw)
+- [n8n](https://github.com/n8n-io/n8n)
+- [n8n setup](https://www.youtube.com/watch?v=V_0dNE-H2gw)
