@@ -1,7 +1,7 @@
-FROM python:3.12.8-alpine3.20
+FROM python:3.11-alpine3.20
 
 # Set the working directory in the container
-WORKDIR /app/
+WORKDIR /backend/
 
 # Copy setup files
 COPY pyproject.toml uv.lock ./
@@ -12,4 +12,4 @@ RUN uv venv && uv sync
 COPY . .
 
 # Set the default command to run the application
-CMD ["/bin/sh", "-c", ". .venv/bin/activate && alembic upgrade head && fastapi dev src/main.py --port 8000 --host 0.0.0.0"]
+CMD ["/bin/sh", "-c", ". .venv/bin/activate && fastapi dev src/main.py --port 8000 --host 0.0.0.0"]
