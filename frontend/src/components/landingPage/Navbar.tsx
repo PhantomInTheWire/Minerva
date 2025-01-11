@@ -1,5 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import Theme from "./Theme";
+import Logo from "./Logo";
 
 const LINKS = [
   { title: "Home", href: "#home" },
@@ -10,19 +12,19 @@ const LINKS = [
 
 export function Navbar() {
   return (
-    <header className="w-full flex items-center justify-between px-12 py-3 border-b-2 border-[#f6f6f6]">
+    <header className="w-full flex items-center justify-between px-12 py-3 border-b-[1px]">
+      {/* border-[#f6f6f6] */}
       <div className="flex items-center gap-8">
         <Link href="/">
-          <figure>
-            <Image src={"/logo.svg"} width={126} height={36} alt="Logo" />
-          </figure>
+          <Logo />
         </Link>
         <nav className="flex items-center gap-8">
           {LINKS.map((link, index) => (
             <Link
               href={link.href}
               key={index}
-              className="font-medium text-[#6d6d6d] hover:text-[#121212]"
+              className="font-medium text-muted-foreground hover:text-primary transition-all duration-300"
+              //   text-[#6d6d6d] hover:text-[#121212]
             >
               {link.title}
             </Link>
@@ -30,9 +32,10 @@ export function Navbar() {
         </nav>
       </div>
 
-      <button className="px-5 py-2 rounded-full text-[#f6f6f6] bg-[#121212] hover:bg-[#333333]">
-        Get Started
-      </button>
+      <div className="flex gap-8">
+        <Theme />
+        <Button className="rounded-full">Get Started</Button>
+      </div>
     </header>
   );
 }
