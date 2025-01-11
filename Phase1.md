@@ -16,6 +16,8 @@
         - Infinite Moving Cards
     - Pricing (0.5sp)
         - Cards
+---
+
 1. Build the notebook creation and material categorization system.
     - Basic Postgresql DB for storing notebooks and their materials
 2. Enable preprocessing methods to convert regular text into markdown semantically. 
@@ -29,3 +31,4 @@
     - Add an llm to query the RAG pipeline
 6. Extend file upload to virtually any file type that can be converted to txt
     - more file type support
+7. Integrate this functionality to a basic UI
