@@ -38,3 +38,18 @@
 6. Extend file upload to virtually any file type that can be converted to txt
     - more file type support
 7. Integrate this functionality to a basic UI
+8. Implement better preprocessing 
+   - For files in pdf format (or pdf friendly formats like .docx or .pptx) add a different pre processing layer that semantically converts them into markdown and JSON for llm processing. find [here](https://www.youtube.com/watch?v=ueP-C_eTxTg) and more [here](https://youtu.be/_U14Rf2bEkk?si=V1ipHNkAXcOgsZ2j)
+   - This will be useful for designing the next overview feature
+
+
+---
+
+## Phase 1.2: Sectional Overview
+
+1. Develop Sectional Overview
+   - Report Generation using Agentic RAG llamaindex (https://www.youtube.com/watch?v=3jnViQZKYHE)
+   - Organize and optimize the markdown using smaller specialized models and make it look eye candy on the frontend.
+   - Add sectional quizes and revision checkpoints etc to help track user progress.
+   - The API for this would be GraphQL instead of REST since this is something that must be queried on demand as the contents being retrieved can be large, and the query responds with  nested JSON objects.
+   - It should have a optional chat bot pop up on the right/left side bar that can take into context anything the user selects and doubts
