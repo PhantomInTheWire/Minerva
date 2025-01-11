@@ -4,7 +4,7 @@ from sqlmodel import create_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 import logging
 
-from ..config import Config
+from src.config import Config
 
 async_engine = AsyncEngine(create_engine(
     url = Config.POSTGRES_URL,
