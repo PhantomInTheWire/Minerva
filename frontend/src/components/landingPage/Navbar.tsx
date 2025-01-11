@@ -12,7 +12,10 @@ const LINKS = [
 
 export function Navbar() {
   return (
-    <header className="w-full flex items-center justify-between px-12 py-3 border-b-[1px]">
+    <header
+      className="w-full flex items-center justify-between px-12 py-3 border-b-[1px] sticky top-0"
+      style={{ backdropFilter: "blur(15px)" }}
+    >
       {/* border-[#f6f6f6] */}
       <div className="flex items-center gap-8">
         <Link href="/">
