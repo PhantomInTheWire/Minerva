@@ -10,7 +10,7 @@ import {
   IconTerminal2,
 } from "@tabler/icons-react";
 
-export function FloatingDockDemo() {
+export function Dock() {
   const links = [
     {
       title: "Home",
