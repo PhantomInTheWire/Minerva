@@ -1,8 +1,8 @@
 # Phase 1
 
-## Phase 1.1: Basic Chat Infrastructure
+## Phase 1.00: Landing Page
 
-0. Landing Page (7.5sp)
+1. Landing Page (7.5sp)
     - Intro (1sp)
         - Spline
     - Tut (2sp)
@@ -16,10 +16,16 @@
         - Infinite Moving Cards
     - Pricing (0.5sp)
         - Cards
----
+--- 
+
+## Phase 1.1: Basic Chat Infrastructure
 
 1. Build the notebook creation and material categorization system.
-    - Basic Postgresql DB for storing notebooks and their materials
+    - Add better logging and middleware
+    - set up db schemas and psql on docker
+    - make it async!
+    - set up alembic migrations
+    - Basic Postgresql DB for storing notebooks and their materials(only pdf in this step)
 2. Enable preprocessing methods to convert regular text into markdown semantically. 
     - Integrate ml pipelines to do this
 3. Build the LightRAG/LazyGraphRag prototype using existing implementation

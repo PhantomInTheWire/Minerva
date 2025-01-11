@@ -12,4 +12,4 @@ RUN uv venv && uv sync
 COPY . .
 
 # Set the default command to run the application
-CMD ["/bin/sh", "-c", ". .venv/bin/activate && fastapi dev main.py --port 8000 --host 0.0.0.0"]
+CMD ["/bin/sh", "-c", ". .venv/bin/activate && fastapi dev src/main.py --port 8000 --host 0.0.0.0"]
