@@ -6,7 +6,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 from sqlmodel import SQLModel
-from src.db.models import PDFDocument
+from backend.src.db.models import PDFDocument
 from sqlmodel import SQLModel
 from dotenv import load_dotenv
 import os
