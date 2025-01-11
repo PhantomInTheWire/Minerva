@@ -100,16 +100,16 @@ The application comprises several components that work together to provide an in
 3. Build the LightRAG/LazyGraphRag prototype using existing implementation
 4. Set up PostgreSQL database to store and manage user materials.
 5. Develop AI agent functionality for querying and basic question answering using different RAG techniques.
-4. Extend text upload to virtually any file type that can be converted to
-txt
+6. Extend file upload to virtually any file type that can be converted to txt
 
 #### Phase 1.2: Better Chat and AI Overview
 
 1. Implement better preprocessing
-   - For files in pdf format (or pdf friendly formats like .docx or .pptx) add a different pre processing layer that semantically converts them into markdown and JSON for llm processing.
+   - For files in pdf format (or pdf friendly formats like .docx or .pptx) add a different pre processing layer that semantically converts them into markdown and JSON for llm processing. find [here](https://www.youtube.com/watch?v=ueP-C_eTxTg) and more [here](https://youtu.be/_U14Rf2bEkk?si=V1ipHNkAXcOgsZ2j)
    - This will be useful for designing the next overview feature
 
 2. Develop Sectional Overview
+   - Report Generation using Agentic RAG llamaindex (https://www.youtube.com/watch?v=3jnViQZKYHE)
    - Organize and optimize the markdown using smaller specialized models and make it look eye candy on the frontend.
    - Add sectional quizes and revision checkpoints etc to help track user progress.
 	- The API for this would be GraphQL instead of REST since this is something that must be queried on demand as the contents being retrieved can be large, and the query responds with  nested JSON objects.
