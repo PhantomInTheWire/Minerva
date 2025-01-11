@@ -226,8 +226,10 @@ The application comprises several components that work together to provide an in
 ### Phase 3: Enhancements
 
 1. User Auth
-2. Add collaboration features for sharing notebooks.
-3. Add elastisearch to let user perform advanced keyword searches on the uploaded as well as generated data
+2. An about page with 3D characters
+3. Google Meet integration 
+4. Add collaboration features for sharing notebooks.
+5. Add elastisearch to let user perform advanced keyword searches on the uploaded as well as generated data
 
 ### Phase 4: Dream
 
