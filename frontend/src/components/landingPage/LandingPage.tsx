@@ -17,7 +17,7 @@ export default function LandingPage() {
 
       <section
         id="home"
-        className="hero w-full h-[80vh] flex flex-col items-center"
+        className="hero w-full h-[70vh] flex flex-col items-center"
       >
         <div className="w-full h-full flex flex-col items-center justify-center gap-20">
           <div className="flex flex-col">
