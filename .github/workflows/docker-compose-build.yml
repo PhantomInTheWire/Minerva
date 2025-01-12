@@ -2,9 +2,9 @@ name: Docker Compose CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "Phase1", "Phase1.1" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "Phase1", "Phase1.1" ]
 
 jobs:
 
