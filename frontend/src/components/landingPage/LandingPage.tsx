@@ -4,16 +4,17 @@ import { AnimatedGridPattern } from "../ui/grid-patterns";
 import { cn } from "@/lib/utils";
 import { Navbar } from "./Navbar";
 import { Button } from "../ui/button";
-import { ContainerScroll } from "../ui/container-scroll-animation";
+// import { ContainerScroll } from "../ui/container-scroll-animation";
+import ScrollAnimatedContainer from "../ui/scroll-animated-container";
 
 export default function LandingPage() {
   return (
-    <div className="w-full min-h-screen flex flex-col">
+    <div className="landing-page w-full min-h-screen flex flex-col">
       <Navbar />
 
-      <div
+      <section
         id="home"
-        className="hero w-full h-[60vh] flex flex-col items-center bg-orange-300"
+        className="hero w-full h-[60vh] flex flex-col items-center"
       >
         <div className="w-full h-full flex flex-col items-center justify-center gap-20">
           <div className="flex flex-col">
@@ -45,12 +46,10 @@ export default function LandingPage() {
             )}
           />
         </div>
-      </div>
-      <div
-        id="features"
-        className="w-full flex flex-col items-center bg-cyan-500"
-      >
-        <ContainerScroll titleComponent={<></>}>
+      </section>
+      <section id="features" className="w-full flex flex-col items-center">
+        {/* <ContainerScroll titleComponent={<></>}> */}
+        <ScrollAnimatedContainer>
           <Image
             src={`/window.png`}
             alt="hero"
@@ -59,8 +58,9 @@ export default function LandingPage() {
             className="mx-auto rounded-2xl object-contain h-full object-left-top"
             draggable={false}
           />
-        </ContainerScroll>
-      </div>
+        </ScrollAnimatedContainer>
+        {/* </ContainerScroll> */}
+      </section>
     </div>
   );
 }

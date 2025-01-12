@@ -2,13 +2,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import Theme from "./Theme";
 import Logo from "./Logo";
-
-const LINKS = [
-  { title: "Home", href: "#home" },
-  { title: "Features", href: "#features" },
-  { title: "Use Cases", href: "#use-cases" },
-  { title: "Pricing", href: "#pricing" },
-];
+import NavLinks from "./NavLinks";
 
 export function Navbar() {
   return (
@@ -21,18 +15,7 @@ export function Navbar() {
         <Link href="/">
           <Logo />
         </Link>
-        <nav className="flex items-center gap-8">
-          {LINKS.map((link, index) => (
-            <Link
-              href={link.href}
-              key={index}
-              className="font-medium text-muted-foreground hover:text-primary transition-all duration-300"
-              //   text-[#6d6d6d] hover:text-[#121212]
-            >
-              {link.title}
-            </Link>
-          ))}
-        </nav>
+        <NavLinks />
       </div>
 
       <div className="flex gap-8">
