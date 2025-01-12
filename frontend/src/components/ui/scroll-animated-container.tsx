@@ -33,7 +33,7 @@ export default function ScrollAnimatedContainer({
         end: "80% 80%", // Ends animation when center of element hits center of viewport
         scrub: 0.5,
         toggleActions: "play none none reverse",
-        markers: true, // Enable for debugging
+        // markers: true, // Enable for debugging
         onEnter: () => console.log("enter"),
         onLeave: () => console.log("leave"),
         onEnterBack: () => console.log("enter back"),
@@ -58,7 +58,7 @@ export default function ScrollAnimatedContainer({
 
   return (
     <div
-      className="w-4/5 max-w-7xl rounded-3xl"
+      className="w-3/5 max-w-7xl rounded-3xl"
       style={{
         margin: "0 auto", // Increased margin to ensure enough scroll space
         display: "flex",
@@ -70,6 +70,7 @@ export default function ScrollAnimatedContainer({
     >
       <div
         ref={containerRef}
+        className="rounded-2xl overflow-hidden"
         style={{
           transformOrigin: "bottom",
           // transition: "transform 0.ease",

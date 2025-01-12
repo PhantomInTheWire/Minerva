@@ -1,14 +1,13 @@
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatedGridPattern } from "../ui/grid-patterns";
 import { cn } from "@/lib/utils";
 import { Navbar } from "./Navbar";
 import { Button } from "../ui/button";
-// import { ContainerScroll } from "../ui/container-scroll-animation";
 import ScrollAnimatedContainer from "../ui/scroll-animated-container";
-import AvatarCircles from "../ui/avatar-circles";
-import { AVATARS, WORDS } from "./data";
+// import AvatarCircles from "../ui/avatar-circles";
+import { PEOPLE, WORDS } from "./data";
 import { TypewriterEffect } from "../ui/typewriter-effect";
+import { AnimatedTooltip } from "../ui/animated-tooltip";
 
 export default function LandingPage() {
   return (
@@ -21,7 +20,6 @@ export default function LandingPage() {
       >
         <div className="w-full h-full flex flex-col items-center justify-center gap-20">
           <div className="flex flex-col">
-            {/* <h1 className="text-[5rem] font-semibold">Learning your way.</h1> */}
             <TypewriterEffect words={WORDS} />
             <h2 className="text-xl text-center text-muted-foreground">
               Learn through the scientifically proven methods with the help of
@@ -41,7 +39,8 @@ export default function LandingPage() {
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            <AvatarCircles numPeople={999} avatarUrls={AVATARS} />
+            {/* <AvatarCircles numPeople={999} avatarUrls={AVATARS} /> */}
+            <AnimatedTooltip items={PEOPLE} />
             <p className="text-muted-foreground">Loved by 999+ learners</p>
           </div>
         </div>
@@ -57,18 +56,11 @@ export default function LandingPage() {
         />
       </section>
       <section id="features" className="w-full flex flex-col items-center">
-        {/* <ContainerScroll titleComponent={<></>}> */}
         <ScrollAnimatedContainer>
-          <Image
-            src={`/window.png`}
-            alt="hero"
-            width={1600}
-            height={781}
-            className="mx-auto rounded-2xl object-contain h-full object-left-top"
-            draggable={false}
-          />
+          <video autoPlay={true} loop muted className="roundex-3xl">
+            <source src="./product-demo.mp4" type="video/mp4" />
+          </video>
         </ScrollAnimatedContainer>
-        {/* </ContainerScroll> */}
       </section>
     </div>
   );
