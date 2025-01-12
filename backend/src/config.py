@@ -14,4 +14,3 @@ class Settings():
 
 
 Config = Settings()
-print(Config.POSTGRES_USER, Config.POSTGRES_PASSWORD, Config.POSTGRES_DB, Config.POSTGRES_URL)
