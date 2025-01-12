@@ -17,29 +17,43 @@ export const WORDS = [
   },
 ];
 
-export const AVATARS = [
+// export const AVATARS = [
+//   {
+//     imageUrl: "https://avatars.githubusercontent.com/u/135950363",
+//     profileUrl: "https://github.com/PhantomInTheWire",
+//   },
+//   {
+//     imageUrl: "https://avatars.githubusercontent.com/u/47332922",
+//     profileUrl: "https://github.com/ishu-codes",
+//   },
+//   {
+//     imageUrl: "https://avatars.githubusercontent.com/u/146630018",
+//     profileUrl: "https://github.com/R-priyanshu",
+//   },
+//   {
+//     imageUrl: "https://avatars.githubusercontent.com/u/153438162",
+//     profileUrl: "https://github.com/codebyyashvi",
+//   },
+// ];
+export const PEOPLE = [
   {
-    imageUrl: "https://avatars.githubusercontent.com/u/135950363",
-    profileUrl: "https://github.com/PhantomInTheWire",
+    id: "135950363",
+    name: "Karan",
+    designation: "PhantomInTheWire",
   },
   {
-    imageUrl: "https://avatars.githubusercontent.com/u/47332922",
-    profileUrl: "https://github.com/ishu-codes",
+    id: "47332922",
+    name: "Ishu",
+    designation: "ishu-codes",
   },
   {
-    imageUrl: "https://avatars.githubusercontent.com/u/146630018",
-    profileUrl: "https://github.com/R-priyanshu",
+    id: "146630018",
+    name: "Priyanshu",
+    designation: "R-Priyanshu",
   },
-  //   {
-  //     imageUrl: "https://avatars.githubusercontent.com/u/59228569",
-  //     profileUrl: "https://github.com/safethecode",
-  //   },
-  //   {
-  //     imageUrl: "https://avatars.githubusercontent.com/u/59442788",
-  //     profileUrl: "https://github.com/sanjay-mali",
-  //   },
-  //   {
-  //     imageUrl: "https://avatars.githubusercontent.com/u/89768406",
-  //     profileUrl: "https://github.com/itsarghyadas",
-  //   },
+  {
+    id: "153438162",
+    name: "Yashvi",
+    designation: "codebyyashvi",
+  },
 ];
