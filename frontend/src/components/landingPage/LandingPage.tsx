@@ -1,19 +1,21 @@
+import Link from "next/link";
+import Image from "next/image";
 import { AnimatedGridPattern } from "../ui/grid-patterns";
 import { cn } from "@/lib/utils";
 import { Navbar } from "./Navbar";
 import { Button } from "../ui/button";
-import Link from "next/link";
+import { ContainerScroll } from "../ui/container-scroll-animation";
 
 export default function LandingPage() {
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="w-full min-h-screen flex flex-col">
       <Navbar />
 
       <div
         id="home"
-        className="hero w-full h-screen flex flex-col items-center"
+        className="hero w-full h-[60vh] flex flex-col items-center bg-orange-300"
       >
-        <div className="w-full h-[90%] flex flex-col items-center justify-center gap-20">
+        <div className="w-full h-full flex flex-col items-center justify-center gap-20">
           <div className="flex flex-col">
             <h1 className="text-[5rem] font-semibold">Learning your way.</h1>
             <h2 className="text-xl text-center text-muted-foreground">
@@ -32,20 +34,32 @@ export default function LandingPage() {
               Get Started
             </Button>
           </div>
+          <AnimatedGridPattern
+            numSquares={30}
+            maxOpacity={0.1}
+            duration={3}
+            repeatDelay={1}
+            className={cn(
+              "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+              "inset-x-0 inset-y-[-40%] h-[200%] skew-y-12 -z-10"
+            )}
+          />
         </div>
-        <AnimatedGridPattern
-          numSquares={30}
-          maxOpacity={0.1}
-          duration={3}
-          repeatDelay={1}
-          className={cn(
-            "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
-            "inset-x-0 inset-y-[-40%] h-[200%] skew-y-12 -z-10"
-          )}
-        />
       </div>
-      <div id="features" className="w-full flex flex-col items-center">
-        Features
+      <div
+        id="features"
+        className="w-full flex flex-col items-center bg-cyan-500"
+      >
+        <ContainerScroll titleComponent={<></>}>
+          <Image
+            src={`/window.png`}
+            alt="hero"
+            width={1600}
+            height={781}
+            className="mx-auto rounded-2xl object-contain h-full object-left-top"
+            draggable={false}
+          />
+        </ContainerScroll>
       </div>
     </div>
   );
