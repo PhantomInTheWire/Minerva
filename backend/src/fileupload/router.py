@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 from uuid import uuid4
 from marker.output import text_from_rendered
+from ..converter import get_converter
 
 upload_router = APIRouter()
 
@@ -23,6 +24,9 @@ async def create_document(
 ):
     if not file.filename.lower().endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+    converter = get_converter()
+    if converter is None:
+        raise HTTPException(status_code=500, detail="PDF converter not initialized")
 
     upload_dir = "uploads"
     os.makedirs(upload_dir, exist_ok=True)
@@ -36,12 +40,16 @@ async def create_document(
 
         rendered = converter(file_path)
         text, metadata, images = text_from_rendered(rendered)
+        print("this was successful ig")
 
         pdf_document = PDFDocument(
             name=file.filename,
             upload_date=datetime.now(),
             file_content=text
         )
+
+        with open("file.txt", "w") as text_file:
+            text_file.write(text)
 
         session.add(pdf_document)
         await session.commit()
