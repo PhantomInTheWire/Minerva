@@ -18,8 +18,11 @@ export default function ScrollAnimatedContainer({
 
     // Initial state - make sure it's visible but scaled down
     gsap.set(element, {
-      scale: 0.8,
-      opacity: 0.5,
+      // scale: 0.8,
+      opacity: 0.8,
+      // translateZ: ,
+      rotateX: 60,
+      scale: 0.6,
     });
 
     // Create the animation
@@ -27,7 +30,7 @@ export default function ScrollAnimatedContainer({
       scrollTrigger: {
         trigger: element,
         start: "top bottom", // Starts animation when top of element hits bottom of viewport
-        end: "center center", // Ends animation when center of element hits center of viewport
+        end: "80% 80%", // Ends animation when center of element hits center of viewport
         scrub: 0.5,
         toggleActions: "play none none reverse",
         markers: true, // Enable for debugging
@@ -41,6 +44,7 @@ export default function ScrollAnimatedContainer({
     // Add animations to timeline
     tl.to(element, {
       scale: 1,
+      rotateX: 0,
       opacity: 1,
       duration: 1,
       ease: "power2.out",
@@ -54,17 +58,25 @@ export default function ScrollAnimatedContainer({
 
   return (
     <div
-      ref={containerRef}
-      className="window w-4/5 max-w-7xl rounded-3xl"
+      className="w-4/5 max-w-7xl rounded-3xl"
       style={{
-        margin: "100px auto", // Increased margin to ensure enough scroll space
+        margin: "0 auto", // Increased margin to ensure enough scroll space
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         willChange: "transform", // Optimize for animations
+        perspective: "1000px",
       }}
     >
-      {children}
+      <div
+        ref={containerRef}
+        style={{
+          transformOrigin: "bottom",
+          // transition: "transform 0.ease",
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }
