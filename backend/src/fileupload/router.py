@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from backend.src.db.models import PDFDocument
-from backend.src.db.main import get_session
+from ..db.models import PDFDocument
+from ..db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import Session, select
 import shutil
