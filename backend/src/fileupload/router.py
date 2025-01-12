@@ -1,83 +1,54 @@
-from typing import List
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from ..db.models import PDFDocument
 from ..db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlmodel import Session, select
 import shutil
 import os
 from datetime import datetime
 from uuid import uuid4
+from marker.output import text_from_rendered
 
 upload_router = APIRouter()
 
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-def save_upload_file(upload_file: UploadFile) -> str:
-    """Save uploaded file to disk and return the file path"""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    unique_filename = f"{timestamp}_{uuid4().hex}_{upload_file.filename}"
-    file_path = os.path.join(UPLOAD_DIR, unique_filename)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(upload_file.file, buffer)
-
-    return file_path
-
-
-@upload_router.get("/")
+@upload_router.get("/", response_model=dict)
 async def health_check():
     return {"health": "positive"}
 
 
 @upload_router.post("/documents/", response_model=PDFDocument, status_code=201)
 async def create_document(
-        name: str,
-        description: str | None = None,
         file: UploadFile = File(...),
         session: AsyncSession = Depends(get_session)
 ):
     if not file.filename.lower().endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
 
-    file_path = save_upload_file(file)
+    upload_dir = "uploads"
+    os.makedirs(upload_dir, exist_ok=True)
 
-    document = PDFDocument(
-        name=name,
-        description=description,
-        file_path=file_path
-    )
+    unique_filename = f"{uuid4()}_{file.filename}"
+    file_path = os.path.join(upload_dir, unique_filename)
 
-    session.add(document)
-    await session.commit()
-    await session.refresh(document)
-    return document
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
+        rendered = converter(file_path)
+        text, metadata, images = text_from_rendered(rendered)
 
-@upload_router.get("/documents/", response_model=List[PDFDocument])
-async def read_documents(session: AsyncSession = Depends(get_session)):
-    result = await session.exec(select(PDFDocument))
-    documents = result.all()
-    return documents
+        pdf_document = PDFDocument(
+            name=file.filename,
+            upload_date=datetime.now(),
+            file_content=text
+        )
 
+        session.add(pdf_document)
+        await session.commit()
+        await session.refresh(pdf_document)
+        return pdf_document
 
-@upload_router.get("/documents/{document_id}", response_model=PDFDocument)
-async def read_document(document_id: str, session: AsyncSession = Depends(get_session)):
-    document = await session.get(PDFDocument, document_id)
-    if not document:
-        raise HTTPException(status_code=404, detail="Document not found")
-    return document
-
-@upload_router.delete("/documents/{document_id}", status_code=204)
-async def delete_document(document_id: str, session: AsyncSession = Depends(get_session)):
-    document = await session.get(PDFDocument, document_id)
-    if not document:
-        raise HTTPException(status_code=404, detail="Document not found")
-
-    if os.path.exists(document.file_path):
-        os.remove(document.file_path)
-
-    await session.delete(document)
-    await session.commit()
-    return None
+    except Exception as _:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        raise HTTPException(status_code=500, detail="An error occurred during file processing.")
