@@ -370,6 +370,8 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
+=======
 name = "markdown"
 version = "3.7"
 source = { registry = "https://pypi.org/simple" }
@@ -379,6 +381,7 @@ wheels = [
 ]
 
 [[package]]
+>>>>>>> 178764584ac9154af4a6d9aa48551639cd211eed
 name = "markdown-it-py"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
