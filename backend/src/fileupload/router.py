@@ -21,53 +21,8 @@ async def health_check():
     return {"health": "positive"}
 
 
-@upload_router.post("/documents/", response_model=PDFDocument, status_code=201)
+@upload_router.post("/documents", response_model=PDFDocument, status_code=201)
 async def create_document(
-        file: UploadFile = File(...),
-        session: AsyncSession = Depends(get_session)
-):
-    if not file.filename.lower().endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
-    converter = get_converter()
-    if converter is None:
-        raise HTTPException(status_code=500, detail="PDF converter not initialized")
-
-    upload_dir = "uploads"
-    os.makedirs(upload_dir, exist_ok=True)
-
-    unique_filename = f"{uuid4()}_{file.filename}"
-    file_path = os.path.join(upload_dir, unique_filename)
-
-    try:
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        rendered = converter(file_path)
-        text, metadata, images = text_from_rendered(rendered)
-        print("this was successful ig")
-
-        pdf_document = PDFDocument(
-            name=file.filename,
-            upload_date=datetime.now(),
-            file_content=text
-        )
-
-        with open("file.txt", "w") as text_file:
-            text_file.write(text)
-
-        session.add(pdf_document)
-        await session.commit()
-        await session.refresh(pdf_document)
-        return pdf_document
-
-    except Exception as _:
-        if os.path.exists(file_path):
-            os.remove(file_path)
-        raise HTTPException(status_code=500, detail="An error occurred during file processing.")
-
-
-@upload_router.post("/documents/fast", response_model=PDFDocument, status_code=201)
-async def create_document_fast(
         file: UploadFile = File(...),
         session: AsyncSession = Depends(get_session)
 ):
@@ -105,10 +60,6 @@ async def create_document_fast(
             upload_date=datetime.now(),
             file_content=text
         )
-
-        # Remove debug file write
-        # with open("file.txt", "w") as text_file:
-        #     text_file.write(text)
 
         session.add(pdf_document)
         await session.commit()
