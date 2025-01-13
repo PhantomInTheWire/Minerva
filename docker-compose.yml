@@ -8,6 +8,7 @@ services:
       - redis
       - db
       - minio
+      - neo4j
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
@@ -16,15 +17,14 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-
-
-
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=${NEO4J_USER}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
   frontend:
     build:
       context: ./frontend
     ports:
       - "3000:3000"
-
   redis:
     image: redis:latest
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
@@ -32,7 +32,6 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "6379:6379"
-
   db:
     image: postgres:latest
     environment:
@@ -43,7 +42,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
   minio:
     image: minio/minio:latest
     command: server /data
@@ -55,7 +53,17 @@ services:
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
     volumes:
       - minio_data:/data
-
+  neo4j:
+    image: neo4j:latest
+    ports:
+      - "7474:7474"  # HTTP
+      - "7687:7687"  # Bolt
+    environment:
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+    volumes:
+      - neo4j_data:/data
 volumes:
   postgres_data:
   minio_data:
+  neo4j_data:
