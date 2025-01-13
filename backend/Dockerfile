@@ -7,7 +7,9 @@ WORKDIR /backend/
 COPY pyproject.toml uv.lock ./
 RUN pip install uv
 RUN uv venv && uv sync
-
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0
 # Copy the rest of the files
 COPY . .
 
