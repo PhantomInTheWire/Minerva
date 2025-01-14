@@ -54,7 +54,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
         id="home"
         ref={ref}
         className={cn(
-          "relative z-0 flex min-h-[75vh] w-full pt-16 flex-col items-center justify-end rounded-md bg-background",
+          "relative z-0 flex min-h-[40rem] w-full pt-16 flex-col items-center justify-end rounded-md bg-background",
           className
         )}
         {...props}
