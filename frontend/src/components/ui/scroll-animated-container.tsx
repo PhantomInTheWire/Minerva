@@ -23,7 +23,6 @@ export default function ScrollAnimatedContainer({
       scale: 0.6,
     });
 
-    // Create the animation
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: element,
