@@ -43,7 +43,7 @@ export default function NavLinks() {
         end: "bottom center",
         onEnter: () => setActiveLink(section.id),
         onEnterBack: () => setActiveLink(section.id),
-        onLeave: () => setActiveLink(""), // Optional: Remove active class when out of view
+        onLeave: () => setActiveLink(""),
       });
     });
 
@@ -72,7 +72,6 @@ export default function NavLinks() {
           href={link.href}
           key={index}
           className="nav-link font-medium text-muted-foreground hover:text-primary transition-all duration-300"
-          //   text-[#6d6d6d] hover:text-[#121212]
         >
           {link.title}
         </Link>

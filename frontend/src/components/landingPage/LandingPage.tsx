@@ -1,12 +1,10 @@
 import Link from "next/link";
-import { AnimatedGridPattern } from "../ui/grid-patterns";
 import { cn } from "@/lib/utils";
+import { AnimatedGridPattern } from "../ui/grid-patterns";
 import { Navbar } from "./Navbar";
 import { Button } from "../ui/button";
 import ScrollAnimatedContainer from "../ui/scroll-animated-container";
-// import AvatarCircles from "../ui/avatar-circles";
-import { PEOPLE, WORDS } from "./data";
-import { TypewriterEffect } from "../ui/typewriter-effect";
+import { PEOPLE } from "./data";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
 import TypingAnimation from "../ui/typing-animation";
 
@@ -21,7 +19,6 @@ export default function LandingPage() {
       >
         <div className="w-full h-full flex flex-col items-center justify-end gap-20">
           <div className="flex flex-col items-center">
-            {/* <TypewriterEffect words={WORDS} /> */}
             <TypingAnimation className="h-20 text-[3.5rem]">
               Learning your way with AI.
             </TypingAnimation>
@@ -43,7 +40,6 @@ export default function LandingPage() {
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            {/* <AvatarCircles numPeople={999} avatarUrls={AVATARS} /> */}
             <AnimatedTooltip items={PEOPLE} />
             <p className="text-muted-foreground">Loved by 999+ learners</p>
           </div>

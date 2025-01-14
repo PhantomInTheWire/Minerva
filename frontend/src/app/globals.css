@@ -127,23 +127,22 @@ body {
 ::-webkit-scrollbar {
   width: 5px; /* Width of the vertical scrollbar */
   height: 5px; /* Height of the horizontal scrollbar */
-  /* position: absolute; */
   display: none;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888; /* Color of the scrollbar thumb */
-  border-radius: 6px; /* Rounded corners for the thumb */
+  background: #888;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Color when hovered */
+  background: #555;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Color of the scrollbar track */
+  background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-track:hover {
-  background: #ddd; /* Color of the track when hovered */
+  background: #ddd;
 }

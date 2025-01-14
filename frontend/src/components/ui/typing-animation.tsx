@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 
 interface TypingAnimationProps extends MotionProps {
   children: string;
-  // children: React.ReactNode;
   className?: string;
   duration?: number;
   delay?: number;
