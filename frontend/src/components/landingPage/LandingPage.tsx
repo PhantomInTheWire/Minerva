@@ -8,6 +8,7 @@ import ScrollAnimatedContainer from "../ui/scroll-animated-container";
 import { PEOPLE, WORDS } from "./data";
 import { TypewriterEffect } from "../ui/typewriter-effect";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
+import TypingAnimation from "../ui/typing-animation";
 
 export default function LandingPage() {
   return (
@@ -18,9 +19,12 @@ export default function LandingPage() {
         id="home"
         className="hero w-full h-[70vh] flex flex-col items-center"
       >
-        <div className="w-full h-full flex flex-col items-center justify-center gap-20">
-          <div className="flex flex-col">
-            <TypewriterEffect words={WORDS} />
+        <div className="w-full h-full flex flex-col items-center justify-end gap-20">
+          <div className="flex flex-col items-center">
+            {/* <TypewriterEffect words={WORDS} /> */}
+            <TypingAnimation className="h-20 text-[3.5rem]">
+              Learning your way with AI.
+            </TypingAnimation>
             <h2 className="text-xl text-center text-muted-foreground">
               Learn through the scientifically proven methods with the help of
               AI
@@ -29,7 +33,7 @@ export default function LandingPage() {
           <div className="flex gap-6">
             <Link
               href="#features"
-              className="text-xl rounded-full px-6 py-2 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+              className="nav-link text-xl rounded-full px-6 py-2 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground transition-all duration-300"
             >
               See features
             </Link>
@@ -55,7 +59,10 @@ export default function LandingPage() {
           )}
         />
       </section>
-      <section id="features" className="w-full flex flex-col items-center">
+      <section
+        id="features"
+        className="w-full flex flex-col items-center pt-20"
+      >
         <ScrollAnimatedContainer>
           <video autoPlay={true} loop muted className="roundex-3xl">
             <source src="./product-demo.mp4" type="video/mp4" />
