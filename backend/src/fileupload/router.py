@@ -1,8 +1,8 @@
+import pymupdf4llm
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from ..db.models import PDFDocument
 from ..db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
-import shutil
 import os
 from datetime import datetime
 from uuid import uuid4
@@ -12,6 +12,7 @@ import aiofiles
 import asyncio
 from fastapi import BackgroundTasks
 from ..middleware import logger
+
 
 upload_router = APIRouter()
 
@@ -74,3 +75,35 @@ async def create_document(
         if os.path.exists(file_path):
             await asyncio.get_event_loop().run_in_executor(None, os.remove, file_path)
         raise HTTPException(status_code=500, detail="An error occurred during file processing.")
+
+
+@upload_router.get("/documents/fast", response_model=PDFDocument, status_code=200)
+async def get_document(
+        file: UploadFile = File(...),
+        session: AsyncSession = Depends(get_session)
+):
+    if not file.filename.lower().endswith('.pdf'):
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+    upload_dir = "uploads"
+    os.makedirs(upload_dir, exist_ok=True)
+
+    unique_filename = f"{uuid4()}_{file.filename}"
+    file_path = os.path.join(upload_dir, unique_filename)
+    async with aiofiles.open(file_path, "wb") as buffer:
+        chunk_size = 64 * 1024  # 64KB chunks
+        while chunk := await file.read(chunk_size):
+            await buffer.write(chunk)
+
+    text = pymupdf4llm.to_markdown(file_path)
+    pdf_document = PDFDocument(
+        name=file.filename,
+        upload_date=datetime.now(),
+        file_content=text
+    )
+    session.add(pdf_document)
+    await session.commit()
+    background_tasks = BackgroundTasks()
+    background_tasks.add_task(os.remove, file_path)
+    return
+
+

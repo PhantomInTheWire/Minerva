@@ -22,4 +22,4 @@ app = FastAPI(
 )
 
 register_middleware(app)
-app.include_router(upload_router, prefix=f"/api/{version}", tags=["file", "upload"])
+app.include_router(upload_router, prefix=f"/api/{version}", tags=["file_upload"])
