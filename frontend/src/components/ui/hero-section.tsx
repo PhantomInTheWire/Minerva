@@ -8,6 +8,31 @@ import { cn } from "@/lib/utils";
 import { PEOPLE } from "../landingPage/data";
 import { AnimatedTooltip, AnimatedGridPattern } from ".";
 
+type Action = {
+  href: string;
+  label: string;
+  variant?:
+    | "link"
+    | "outline"
+    | "default"
+    | "destructive"
+    | "secondary"
+    | "ghost"
+    | null;
+};
+
+interface HeroProps extends React.HTMLAttributes<HTMLElement> {
+  className?: string;
+  gradient?: boolean;
+  blur?: boolean;
+  title: string;
+  subtitle?: React.ReactNode;
+  actions?: Action[];
+  titleClassName?: string;
+  subtitleClassName?: string;
+  actionsClassName?: string;
+}
+
 const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
   (
     {
@@ -159,7 +184,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
           numSquares={30}
           maxOpacity={0.1}
           duration={3}
-          repeatDelay={1}
+          repeatdelay={1}
           className={cn(
             "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
             "inset-x-0 inset-y-[-40%] h-[200%] skew-y-12 -z-10"
