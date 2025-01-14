@@ -22,7 +22,7 @@ export function AnimatedGridPattern({
   width = 40,
   height = 40,
   x = -1,
-  y = -1,
+  y = 2,
   strokeDasharray = 0,
   numSquares = 50,
   className,
@@ -99,7 +99,7 @@ export function AnimatedGridPattern({
       ref={containerRef}
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute inset-0 h-full w-full fill-gray-400/30 stroke-gray-400/30",
+        "pointer-events-none absolute inset-20 h-full w-full fill-gray-400/30 stroke-gray-400/30",
         className
       )}
       {...props}
