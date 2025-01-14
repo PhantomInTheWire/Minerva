@@ -19,6 +19,12 @@ upload_router = APIRouter()
 
 @upload_router.get("/", response_model=dict)
 async def health_check():
+    """
+    Perform a simple health check for the service.
+    
+    Returns:
+        dict: A dictionary with a health status indicator, confirming the service is operational.
+    """
     return {"health": "positive"}
 
 
@@ -27,7 +33,31 @@ async def create_document(
         file: UploadFile = File(...),
         session: AsyncSession = Depends(get_session)
 ):
-    if not file.filename.lower().endswith('.pdf'):
+    """
+        Create a new PDF document from an uploaded file.
+        
+        Asynchronously processes a PDF file upload, extracts text and metadata, and saves the document to the database.
+        
+        Parameters:
+            file (UploadFile): The uploaded PDF file to be processed.
+            session (AsyncSession): Database session for storing the document.
+        
+        Returns:
+            PDFDocument: The created document with extracted text and metadata.
+        
+        Raises:
+            HTTPException: 
+                - 400 if the uploaded file is not a PDF
+                - 500 if PDF converter fails to initialize or processing encounters an error
+        
+        Notes:
+            - Saves the uploaded file temporarily in an 'uploads' directory
+            - Uses a unique filename to prevent conflicts
+            - Processes file in 64KB chunks for memory efficiency
+            - Automatically deletes the temporary file after processing
+            - Logs any errors encountered during file processing
+        """
+        if not file.filename.lower().endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
 
     # Initialize converter outside of request handling
@@ -82,7 +112,23 @@ async def get_document(
         file: UploadFile = File(...),
         session: AsyncSession = Depends(get_session)
 ):
-    if not file.filename.lower().endswith('.pdf'):
+    """
+        Asynchronously process and save a PDF document to the database using fast markdown conversion.
+        
+        Parameters:
+            file (UploadFile): The uploaded PDF file to be processed
+            session (AsyncSession): Database session for storing the document
+        
+        Raises:
+            HTTPException: If the uploaded file is not a PDF
+        
+        Notes:
+            - Saves the uploaded PDF file temporarily in the 'uploads' directory
+            - Converts PDF to markdown using pymupdf4llm
+            - Creates a PDFDocument with the file's name, upload date, and markdown content
+            - Schedules the temporary file for deletion after processing
+        """
+        if not file.filename.lower().endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
     upload_dir = "uploads"
     os.makedirs(upload_dir, exist_ok=True)

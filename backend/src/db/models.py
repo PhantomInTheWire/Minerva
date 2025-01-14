@@ -11,4 +11,10 @@ class PDFDocument(SQLModel, table=True):
     file_content: str = Field(sa_column=Column(pg.TEXT, default=""))
 
     def __repr__(self) -> str:
+        """
+        Return a string representation of the PDF document.
+        
+        Returns:
+            str: A formatted string containing the name of the PDF document.
+        """
         return f"<User {self.name}>"
