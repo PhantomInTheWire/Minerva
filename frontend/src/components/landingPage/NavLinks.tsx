@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { gsap } from "gsap";
-import { ScrollTrigger, ScrollToPlugin } from "gsap/all";
+import { gsap, ScrollTrigger, ScrollToPlugin } from "gsap/all";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
