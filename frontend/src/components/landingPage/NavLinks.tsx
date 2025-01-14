@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollTrigger, ScrollToPlugin } from "gsap/all";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const LINKS = [
   { title: "Home", href: "#home" },
@@ -18,6 +18,23 @@ export default function NavLinks() {
   useEffect(() => {
     const sections = document.querySelectorAll("section");
     const links = document.querySelectorAll(".nav-link");
+
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const targetId = link.getAttribute("href")?.substring(1);
+        const targetElement = document.getElementById(targetId!);
+
+        if (targetElement) {
+          gsap.to(window, {
+            scrollTo: { y: targetElement, autoKill: true },
+            duration: 1.5,
+            ease: "power2.out",
+          });
+        }
+      });
+    });
 
     sections.forEach((section) => {
       ScrollTrigger.create({
@@ -44,6 +61,7 @@ export default function NavLinks() {
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      links.forEach((link) => link.removeEventListener("click", () => {}));
     };
   }, []);
 
