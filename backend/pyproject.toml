@@ -26,4 +26,5 @@ dependencies = [
     "marker-pdf>=1.2.3",
     "asyncio>=3.4.3",
     "aiofiles>=24.1.0",
+    "pymupdf4llm>=0.0.17",
 ]
