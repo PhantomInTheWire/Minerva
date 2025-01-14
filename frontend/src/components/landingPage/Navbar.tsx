@@ -11,7 +11,7 @@ export function Navbar() {
         <div className="glass-effect w-full h-full absolute -z-10" />
         {/* border-[#f6f6f6] */}
         <div className="flex items-center gap-8">
-          <Link href="/">
+          <Link href="#home" className="nav-link">
             <Logo />
           </Link>
           <NavLinks />

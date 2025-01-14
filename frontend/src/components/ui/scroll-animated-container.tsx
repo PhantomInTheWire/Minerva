@@ -61,10 +61,7 @@ export default function ScrollAnimatedContainer({
     >
       <div
         ref={containerRef}
-        className="rounded-2xl overflow-hidden"
-        style={{
-          transformOrigin: "bottom",
-        }}
+        className="rounded-2xl overflow-hidden origin-bottom"
       >
         {children}
       </div>
