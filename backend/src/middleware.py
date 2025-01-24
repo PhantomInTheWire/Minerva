@@ -52,18 +52,12 @@ def register_middleware(app: FastAPI):
     @app.middleware("http")
     async def custom_logging(request: Request, call_next):
         start_time = time.time()
-
-        # Get request method emoji
         method_emoji = get_method_emoji(request.method)
 
-        # Process the request
         response = await call_next(request)
 
-        # Calculate processing time
         processing_time = time.time() - start_time
         formatted_time = format_time(processing_time)
-
-        # Get status code color and emoji
         status_color, status_emoji = get_status_color_and_emoji(response.status_code)
 
         # Format the log message
@@ -93,5 +87,4 @@ def register_middleware(app: FastAPI):
             "127.0.0.1",
             "0.0.0.0",
         ]
-
     )
