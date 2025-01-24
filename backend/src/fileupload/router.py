@@ -77,8 +77,8 @@ async def create_document(
         raise HTTPException(status_code=500, detail="An error occurred during file processing.")
 
 
-@upload_router.get("/documents/fast", response_model=PDFDocument, status_code=200)
-async def get_document(
+@upload_router.post("/documents/fast", response_model=PDFDocument, status_code=200)
+async def fast_create_document(
         file: UploadFile = File(...),
         session: AsyncSession = Depends(get_session)
 ):
@@ -104,6 +104,5 @@ async def get_document(
     await session.commit()
     background_tasks = BackgroundTasks()
     background_tasks.add_task(os.remove, file_path)
-    return
-
+    return {"text": text}
 
