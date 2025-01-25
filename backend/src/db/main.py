@@ -1,18 +1,33 @@
-from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import create_engine
-from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlmodel import SQLModel
 from ..config import Config
 
-async_engine = AsyncEngine(create_engine(
-    url = Config.POSTGRES_URL,
-))
+# Create async engine
+async_engine = create_async_engine(
+    url=Config.POSTGRES_URL,
+    echo=True,  # Set to False in production
+    future=True
+)
+
+# Session factory for background tasks and manual session management
+SessionLocal = sessionmaker(
+    bind=async_engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autoflush=False,
+    autocommit=False,
+)
 
 async def get_session() -> AsyncSession:
-    """Dependency to provide the session object"""
-    async_session = sessionmaker(
-        bind=async_engine, class_=AsyncSession, expire_on_commit=False
-    )
+    """FastAPI dependency for request-scoped sessions"""
+    async with SessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
 
-    async with async_session() as session:
-        yield session
+async def create_db_and_tables():
+    """Create database tables (optional, for initialization)"""
+    async with async_engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
