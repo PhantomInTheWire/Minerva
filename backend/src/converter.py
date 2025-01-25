@@ -11,4 +11,3 @@ async def init_converter():
 
 def get_converter():
     return pdf_converter
-
