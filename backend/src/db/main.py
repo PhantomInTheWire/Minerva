@@ -6,11 +6,11 @@ from ..config import Config
 # Create async engine
 async_engine = create_async_engine(
     url=Config.POSTGRES_URL,
-    echo=True,  # Set to False in production
+    #TODO: set to false in production
+    echo=True,
     future=True
 )
 
-# Session factory for background tasks and manual session management
 SessionLocal = sessionmaker(
     bind=async_engine,
     class_=AsyncSession,
