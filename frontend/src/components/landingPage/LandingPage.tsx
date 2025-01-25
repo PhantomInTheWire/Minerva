@@ -1,5 +1,6 @@
+import { HeroSection, ScrollAnimatedContainer } from "@/components/ui";
 import { Navbar } from "./Navbar";
-import { HeroSection, ScrollAnimatedContainer } from "../ui";
+import { ACTIONS } from "./data";
 
 export default function LandingPage() {
   return (
@@ -9,18 +10,7 @@ export default function LandingPage() {
       <HeroSection
         title="AI that works for you."
         subtitle="Transform your workflow with intelligent automation. Simple, powerful, reliable."
-        actions={[
-          {
-            label: "See Features",
-            href: "#features",
-            variant: "outline",
-          },
-          {
-            label: "Get Started",
-            href: "#",
-            variant: "default",
-          },
-        ]}
+        actions={ACTIONS}
         titleClassName="text-5xl md:text-6xl font-extrabold"
         subtitleClassName="text-lg md:text-xl max-w-[600px]"
         actionsClassName="mt-8"
