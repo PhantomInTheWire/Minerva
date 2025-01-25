@@ -1,4 +1,13 @@
 from marker.output import text_from_rendered
+from .error import (
+    DocumentNotFoundError,
+    ConverterInitializationError,
+    FileSaveError,
+    FileDeleteError,
+    DatabaseCommitError,
+    PDFProcessingError,
+    APIError
+)
 from ..converter import get_converter
 from ..middleware import logger
 from ..db.main import SessionLocal
@@ -17,13 +26,11 @@ async def run_slow_processing(document_id: str, file_path: str):
         try:
             document = await session.get(PDFDocument, document_id)
             if not document:
-                logger.error(f"Document {document_id} not found for slow processing")
-                return
+                raise DocumentNotFoundError(f"Document {document_id} not found")
 
             converter = get_converter()
             if not converter:
-                logger.error("PDF converter not initialized in slow processing")
-                return
+                raise ConverterInitializationError("PDF converter not initialized")
 
             rendered = await asyncio.get_event_loop().run_in_executor(
                 None, converter, file_path
@@ -39,8 +46,9 @@ async def run_slow_processing(document_id: str, file_path: str):
             logger.info(f"Slow processing completed for document {document_id}")
 
         except Exception as e:
-            logger.error(f"Error during slow processing of document {document_id}: {str(e)}")
-            await session.rollback()
+            if not isinstance(e, APIError):
+                raise APIError("Slow processing failed", original_error=e)
+            raise
         finally:
             await remove_file(file_path)
 
@@ -49,34 +57,44 @@ async def remove_file(file_path: str):
         try:
             await asyncio.get_event_loop().run_in_executor(None, os.remove, file_path)
         except Exception as e:
-            logger.error(f"Error deleting file {file_path}: {str(e)}")
+            raise FileDeleteError(f"Error deleting file {file_path}") from e
 
 async def save_pdf_file(file: UploadFile) -> str:
     """Save uploaded PDF file with UUID prefix"""
-    upload_dir = "uploads"
-    os.makedirs(upload_dir, exist_ok=True)
-    file_path = os.path.join(upload_dir, f"{uuid4()}_{file.filename}")
-    async with aiofiles.open(file_path, "wb") as buffer:
-        await file.seek(0)
-        while content := await file.read(64 * 1024):
-            await buffer.write(content)
-    return file_path
+    try:
+        upload_dir = "uploads"
+        os.makedirs(upload_dir, exist_ok=True)
+        file_path = os.path.join(upload_dir, f"{uuid4()}_{file.filename}")
+        async with aiofiles.open(file_path, "wb") as buffer:
+            await file.seek(0)
+            while content := await file.read(64 * 1024):
+                await buffer.write(content)
+        return file_path
+    except Exception as e:
+        raise FileSaveError(f"Failed to save file: {str(e)}") from e
 
 async def create_document_record(session: AsyncSession, filename: str, content: str) -> PDFDocument:
     """Create and commit PDFDocument record"""
-    doc = PDFDocument(
-        name=filename,
-        upload_date=datetime.now(),
-        file_content=content
-    )
-    session.add(doc)
-    await session.commit()
-    await session.refresh(doc)
-    return doc
+    try:
+        doc = PDFDocument(
+            name=filename,
+            upload_date=datetime.now(),
+            file_content=content
+        )
+        session.add(doc)
+        await session.commit()
+        await session.refresh(doc)
+        return doc
+    except Exception as e:
+        await session.rollback()
+        raise DatabaseCommitError("Failed to create document record") from e
 
 def extract_fast_text(file_path: str) -> str:
     """Extract text using pymupdf4llm (fast)"""
-    return pymupdf4llm.to_markdown(file_path)
+    try:
+        return pymupdf4llm.to_markdown(file_path)
+    except Exception as e:
+        raise PDFProcessingError(f"Fast text extraction failed: {str(e)}") from e
 
 async def full_upload_process(file: UploadFile, session: AsyncSession) -> tuple[PDFDocument, str]:
     """Full upload processing pipeline"""
@@ -87,3 +105,4 @@ async def full_upload_process(file: UploadFile, session: AsyncSession) -> tuple[
         return document, file_path
     except Exception as e:
         logger.error(f"Error during processing of file {str(e)}")
+        raise

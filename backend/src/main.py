@@ -1,6 +1,4 @@
 from contextlib import asynccontextmanager
-from marker.converters.pdf import PdfConverter
-from marker.models import create_model_dict
 from fastapi import FastAPI
 from .fileupload.router import upload_router
 from .middleware import register_middleware
