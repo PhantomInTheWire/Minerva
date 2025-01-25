@@ -5,10 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PEOPLE, UNIVERSITIES } from "../landingPage/data";
+import { PEOPLE } from "../landingPage/data";
 import { AnimatedTooltip, AnimatedGridPattern } from ".";
-import { AnimatedGradientText } from "./animated-gradient-text";
-import { MovingLogos } from "./moving-logos";
 
 type Action = {
   href: string;
@@ -51,6 +49,34 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
     },
     ref
   ) => {
+    const containerVariants = {
+      hidden: {
+        opacity: 1, // Keeps the container visible
+      },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.4, // Delay between child animations
+        },
+      },
+    };
+
+    // Variants for individual elements
+    const itemVariants = {
+      hidden: {
+        opacity: 0,
+        y: 100,
+      },
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: 1.2,
+          ease: "easeInOut",
+        },
+      },
+    };
+
     return (
       <section
         id="home"
@@ -127,14 +153,8 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
         )}
 
         {/* Contents */}
-        <motion.div
-          initial={{ y: 100, opacity: 0.5 }}
-          viewport={{ once: true }}
-          transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          className="relative z-50 pt-20 container flex justify-end flex-1 flex-col px-5 md:px-10 gap-4"
-        >
-          <div
+        <div className="relative z-50 pt-40 container flex justify-end flex-1 flex-col px-5 md:px-10 gap-4">
+          {/* <div
             className={cn(
               "group mx-auto rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
             )}
@@ -148,28 +168,46 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
                 ✨ Introducing Minerva
               </span>
             </AnimatedGradientText>
-          </div>
-          <div className="flex flex-col items-center text-center">
-            <h1
+          </div> */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center text-center"
+          >
+            <motion.h1
+              variants={itemVariants}
+              // initial={{ y: 100, opacity: 0.5 }}
+              viewport={{ once: true }}
+              // transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+              // whileInView={{ y: 0, opacity: 1 }}
               className={cn(
                 "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight",
                 titleClassName
               )}
             >
               {title}
-            </h1>
+            </motion.h1>
             {subtitle && (
-              <p
+              <motion.p
+                variants={itemVariants}
+                // initial={{ opacity: 0.5 }}
+                viewport={{ once: true }}
+                // transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+                // whileInView={{ opacity: 1 }}
                 className={cn(
                   "mt-4 text-xl text-muted-foreground",
                   subtitleClassName
                 )}
               >
                 {subtitle}
-              </p>
+              </motion.p>
             )}
             {actions && actions.length > 0 && (
-              <div className={cn("mt-8 flex gap-4", actionsClassName)}>
+              <motion.div
+                variants={itemVariants}
+                className={cn("buttons flex gap-4", actionsClassName)}
+              >
                 {actions.map((action, index) => (
                   <Button
                     key={index}
@@ -181,48 +219,41 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
                     </Link>
                   </Button>
                 ))}
-              </div>
+              </motion.div>
             )}
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* Animated tooltip */}
         <motion.div
           initial={{ opacity: 0 }}
           viewport={{ once: true }}
-          transition={{ ease: "easeInOut", delay: 1.1, duration: 0.8 }}
+          transition={{ ease: "easeInOut", delay: 1.6, duration: 0.8 }}
           whileInView={{ opacity: 1 }}
-          className="relative z-50 container flex justify-center flex-col px-5 md:px-10 pt-16 gap-4"
+          className="relative z-50 container flex justify-center flex-col px-5 md:px-10 pt-24 gap-4"
         >
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-4">
             <AnimatedTooltip items={PEOPLE} />
             <p className="text-muted-foreground">Loved by 10,000+ learners</p>
-            <p className="text-muted-foreground">
+            {/* <p className="text-muted-foreground">
               from 200+ Universities worldwide
-            </p>
+            </p> */}
           </div>
         </motion.div>
 
-        {/* Moving logos */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          viewport={{ once: true }}
-          transition={{ ease: "easeInOut", delay: 1.8, duration: 0.8 }}
-          whileInView={{ opacity: 1 }}
-          className="mt-10 rounded-md flex flex-col antialiase dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden"
-        >
-          <MovingLogos items={UNIVERSITIES} direction="left" speed="normal" />
-        </motion.div>
         <AnimatedGridPattern
           numSquares={30}
           maxOpacity={0.1}
           duration={3}
           repeatdelay={1}
           className={cn(
-            "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+            "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
             "inset-x-0 inset-y-[-40%] h-[200%] skew-y-12 -z-10"
           )}
         />
+        {/* <div className="-z-20 w-full absolute">
+          <ParticlesBg />
+        </div> */}
       </section>
     );
   }
