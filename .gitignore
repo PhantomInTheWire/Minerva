@@ -2,5 +2,9 @@
 .DS_STORE
 .idea/
 .idea/*
+.vscode/
 
 uploads/
+
+# Helper codes
+Helper/

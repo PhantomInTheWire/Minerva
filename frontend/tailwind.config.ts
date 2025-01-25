@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -66,6 +67,10 @@ export default {
       animation: {
         spotlight: "spotlight 2s ease .75s 1 forwards",
         spin: "spin 3s linear infinite",
+        "shiny-text": "shiny-text 8s infinite",
+        gradient: "gradient 8s linear infinite",
+        scroll:
+          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       },
       keyframes: {
         spotlight: {
@@ -86,8 +91,30 @@ export default {
             "--angle": "360deg",
           },
         },
+        "shiny-text": {
+          "0%, 90%, 100%": {
+            "background-position": "calc(-100% - var(--shiny-width)) 0",
+          },
+          "30%, 60%": {
+            "background-position": "calc(100% + var(--shiny-width)) 0",
+          },
+        },
+        gradient: {
+          to: {
+            backgroundPosition: "var(--bg-size) 0",
+          },
+        },
+        scroll: {
+          to: {
+            transform: "translate(calc(-50% - 0.5rem))",
+          },
+        },
+      },
+      backgroundImage: {
+        "grid-pattern": "",
+        "grid-pattern-light": "",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [plugin],
 } satisfies Config;

@@ -1,3 +1,28 @@
+type Action = {
+  href: string;
+  label: string;
+  variant:
+    | "link"
+    | "outline"
+    | "default"
+    | "destructive"
+    | "secondary"
+    | "ghost"
+    | null;
+};
+export const ACTIONS: Action[] = [
+  {
+    label: "See Features",
+    href: "#features",
+    variant: "outline",
+  },
+  {
+    label: "Get Started",
+    href: "#",
+    variant: "default",
+  },
+];
+
 export const PEOPLE = [
   {
     id: "135950363",
@@ -19,4 +44,16 @@ export const PEOPLE = [
     name: "Yashvi",
     designation: "codebyyashvi",
   },
+];
+
+export const UNIVERSITIES = [
+  "Michigan State University",
+  "Massachusetts Institute of Technology",
+  "University of Michigan",
+  "Princeton University",
+  "Stanford University",
+  "Harvard University",
+  "University of Pennsylvania",
+  "University of California",
+  "University of Chicago",
 ];

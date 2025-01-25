@@ -5,8 +5,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PEOPLE } from "../landingPage/data";
+import { PEOPLE, UNIVERSITIES } from "../landingPage/data";
 import { AnimatedTooltip, AnimatedGridPattern } from ".";
+import { AnimatedGradientText } from "./animated-gradient-text";
+import { MovingLogos } from "./moving-logos";
 
 type Action = {
   href: string;
@@ -58,7 +60,6 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
           className
         )}
         {...props}
-        // style={{ backgroundColor: "cyan" }}
       >
         {gradient && (
           <div className="absolute top-0 isolate z-0 flex w-screen flex-1 items-start justify-center pt-16">
@@ -125,13 +126,29 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
           </div>
         )}
 
+        {/* Contents */}
         <motion.div
           initial={{ y: 100, opacity: 0.5 }}
           viewport={{ once: true }}
           transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
           whileInView={{ y: 0, opacity: 1 }}
-          className="relative z-50 container flex justify-end flex-1 flex-col px-5 md:px-10 gap-4"
+          className="relative z-50 pt-20 container flex justify-end flex-1 flex-col px-5 md:px-10 gap-4"
         >
+          <div
+            className={cn(
+              "group mx-auto rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+            )}
+          >
+            <AnimatedGradientText>
+              <span
+                className={cn(
+                  `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`
+                )}
+              >
+                ✨ Introducing Minerva
+              </span>
+            </AnimatedGradientText>
+          </div>
           <div className="flex flex-col items-center text-center">
             <h1
               className={cn(
@@ -168,6 +185,8 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
             )}
           </div>
         </motion.div>
+
+        {/* Animated tooltip */}
         <motion.div
           initial={{ opacity: 0 }}
           viewport={{ once: true }}
@@ -177,8 +196,22 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
         >
           <div className="flex flex-col items-center gap-2">
             <AnimatedTooltip items={PEOPLE} />
-            <p className="text-muted-foreground">Loved by 999+ learners</p>
+            <p className="text-muted-foreground">Loved by 10,000+ learners</p>
+            <p className="text-muted-foreground">
+              from 200+ Universities worldwide
+            </p>
           </div>
+        </motion.div>
+
+        {/* Moving logos */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          viewport={{ once: true }}
+          transition={{ ease: "easeInOut", delay: 1.8, duration: 0.8 }}
+          whileInView={{ opacity: 1 }}
+          className="mt-10 rounded-md flex flex-col antialiase dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden"
+        >
+          <MovingLogos items={UNIVERSITIES} direction="left" speed="normal" />
         </motion.div>
         <AnimatedGridPattern
           numSquares={30}
