@@ -8,7 +8,7 @@ export function Navbar() {
   return (
     <>
       <header className="w-full flex items-center justify-between px-36 py-3 border-b-[1px] fixed top-0 z-40 backdrop:blur-lg">
-        <div className="glass-effect w-full h-full absolute -z-10" />
+        <div className="glass-effect w-full h-full absolute left-0 -z-10" />
         {/* border-[#f6f6f6] */}
         <div className="flex items-center gap-8">
           <Link href="#home" className="nav-link">
