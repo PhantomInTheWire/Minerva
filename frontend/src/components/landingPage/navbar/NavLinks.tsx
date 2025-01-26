@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 const LINKS = [
   { title: "Home", href: "#home" },
   { title: "Features", href: "#features" },
-  { title: "Use Cases", href: "#use-cases" },
+  { title: "Getting Started", href: "#getting-started" },
   { title: "Pricing", href: "#pricing" },
 ];
 

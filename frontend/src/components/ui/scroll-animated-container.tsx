@@ -49,7 +49,7 @@ export default function ScrollAnimatedContainer({
 
   return (
     <div
-      className="w-3/5 max-w-7xl rounded-3xl"
+      className="w-3/5 rounded-3xl"
       style={{
         margin: "0 auto",
         display: "flex",
