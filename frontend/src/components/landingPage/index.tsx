@@ -1,11 +1,8 @@
-import { motion } from "framer-motion";
-import {
-  HeroSection,
-  ScrollAnimatedContainer,
-  MovingLogos,
-} from "@/components/ui";
-import { Navbar } from "./Navbar";
-import { ACTIONS, UNIVERSITIES } from "@/components/landingPage/data";
+import { Navbar } from "./navbar";
+import { ACTIONS } from "./data";
+import Introduction from "./introduction";
+import { HeroSection } from "./hero";
+// import { MovingLogos } from "../ui";
 
 export default function LandingPage() {
   return (
@@ -20,15 +17,10 @@ export default function LandingPage() {
         subtitleClassName="text-lg md:text-xl max-w-[600px]"
         actionsClassName="mt-16"
       />
-      <section
-        id="features"
-        className="w-full flex flex-col items-center py-20"
-      >
-        <ScrollAnimatedContainer>
-          <video autoPlay={true} loop muted className="roundex-3xl">
-            <source src="./product-demo.mp4" type="video/mp4" />
-          </video>
-        </ScrollAnimatedContainer>
+      <section id="features" className="w-full flex flex-col items-center">
+        {/* Introduction */}
+        <Introduction />
+
         {/* Moving logos */}
         {/* <motion.div
           initial={{ opacity: 0 }}
