@@ -5,8 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PEOPLE } from "../landingPage/data";
-import { AnimatedTooltip, AnimatedGridPattern } from ".";
+import { PEOPLE } from "../data";
+import { AnimatedTooltip, AnimatedGridPattern } from "../../ui";
 
 type Action = {
   href: string;
@@ -82,7 +82,7 @@ const HeroSection = React.forwardRef<HTMLElement, HeroProps>(
         id="home"
         ref={ref}
         className={cn(
-          "relative z-0 flex min-h-[40rem] w-full pt-16 flex-col items-center justify-end rounded-md bg-background",
+          "relative z-0 flex min-h-[40rem] w-full py-16 flex-col items-center justify-end bg-background",
           className
         )}
         {...props}
