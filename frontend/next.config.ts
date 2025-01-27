@@ -16,6 +16,13 @@ const nextConfig: NextConfig = {
         pathname: "**",
         search: "",
       },
+      {
+        protocol: "https",
+        hostname: "framerusercontent.com",
+        port: "",
+        pathname: "**",
+        search: "",
+      },
     ],
   },
 };
