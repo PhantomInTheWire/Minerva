@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, BackgroundTasks
 from sqlmodel.ext.asyncio.session import AsyncSession
-from .error import handle_api_errors, InvalidFileTypeError, FileProcessingError
+from ..error import handle_api_errors, InvalidFileTypeError, FileProcessingError
 from .service import run_slow_processing, full_upload_process
 from ..db.main import get_session
 from ..db.models import PDFDocument
