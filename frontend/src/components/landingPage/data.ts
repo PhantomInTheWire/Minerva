@@ -115,3 +115,60 @@ export const PRICES = [
     isPrimary: true,
   },
 ];
+
+export const TESTIMONIALS = [
+  {
+    avatar:
+      "https://framerusercontent.com/images/fWuqqsO0xh5aOtdsijFa5ya43s.png",
+    name: "Mihir Wadekar",
+    handle: "mihirwadekar",
+    text: "I love this tool, like the YouTube video summarizer! I use it to learn concepts ranging from Econ to Quantum Mechanics, and it makes learning so much easier and more effective.",
+    url: "https://x.com/mihirwadekar",
+  },
+  {
+    avatar:
+      "https://framerusercontent.com/images/77iAAi0tU0Bn4SnYih27cK4XFQU.png",
+    name: "G. Shaw Jr.",
+    handle: "gshaw",
+    text: "I definitely plan to experiment with Minerva in my online course this summer to offer students an additional method of engagement with more complex topics.",
+    url: "https://x.com/gshaw",
+  },
+  {
+    avatar:
+      "https://framerusercontent.com/images/JBEU11tjLK40MMvXZRcr2sEF51g.png",
+    name: "Nasim Uddin",
+    handle: "nasimuddin",
+    text: "I wish I had this when I was in school",
+    url: "https://x.com/nasimuddin",
+  },
+  {
+    avatar:
+      "https://framerusercontent.com/images/62aw1wEl3BGN1ah6ulm1H7pR3o.png",
+    name: "Rohan Robinson",
+    handle: "rohanrobinson",
+    text: "Minerva is awesome , just used it to learn from a biotech roundtable discussion!",
+    url: "https://x.com/rohanrobinson",
+  },
+  {
+    avatar:
+      "https://framerusercontent.com/images/6uRxcr6Fkzu3JKK92Tk4hBZgkY.jpg",
+    name: "Jason Patel",
+    handle: "jasonpatel",
+    text: 'This Minerva site, with features like "Chat with PDF," has become an integral part of our daily workflow. It has streamlined our process of understanding videos and PDFs.',
+    url: "https://x.com/jasonpatel",
+  },
+  {
+    avatar:
+      "https://framerusercontent.com/images/t39zCBPho6ANhEECFQrStjtUVME.jpg",
+    name: "Kate Doe",
+    handle: "katedoe",
+    text: "I use Minerva on a daily basis now. It's streamlined my processes and improved how I learn materials.",
+    url: "https://x.com/katedoe",
+  },
+];
+
+export const FOOTER_LINKS = [
+  { title: "Terms & Conditions", href: "./terms-conditions" },
+  { title: "Privacy Policy", href: "./privacy-policy" },
+  { title: "Contact Us", href: "./contact-us" },
+];
