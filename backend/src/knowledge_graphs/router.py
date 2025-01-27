@@ -7,6 +7,7 @@ from itext2kg.graph_integration import GraphIntegrator
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from ..middleware import logger
 from ..config import Settings
+from neo4j import GraphDatabase
 
 @knowledge_graph_router.get("/knowledge-graph")
 async def markdown_to_neo4j_kg(markdown_string: str):
@@ -17,8 +18,10 @@ async def markdown_to_neo4j_kg(markdown_string: str):
         markdown_string: The large markdown string to process.
 
     Returns:
-        None.  The function visualizes the graph in Neo4j.
+        dict: Status and message indicating success or failure.
     """
+    if not markdown_string:
+        return {"status": "error", "message": "Empty markdown string provided"}
 
     logger.info("Starting markdown processing...")
     openai_llm_model = ChatGoogleGenerativeAI(
@@ -34,8 +37,22 @@ async def markdown_to_neo4j_kg(markdown_string: str):
 
     logger.info("iText2KG initialized.")
 
-    kg = itext2kg.build_graph(sections=[markdown_string])
-    logger.info("Knowledge Graph built.")
+    try:
+        # Clean and validate markdown string
+        cleaned_markdown = markdown_string.strip()
+        if '{' in cleaned_markdown or '}' in cleaned_markdown:
+            cleaned_markdown = cleaned_markdown.replace('{', '{{').replace('}', '}}')
+            
+        # Build knowledge graph with validated markdown
+        try:
+            kg = itext2kg.build_graph(sections=[cleaned_markdown])
+            logger.info("Knowledge Graph built.")
+        except ValueError as ve:
+            logger.error(f"Validation error while building graph: {str(ve)}")
+            return {"status": "error", "message": f"Invalid markdown format: {str(ve)}"}
+    except Exception as e:
+        logger.error(f"Error building knowledge graph: {str(e)}")
+        return {"status": "error", "message": f"Failed to build knowledge graph: {str(e)}"}
 
     graph_integrator = GraphIntegrator(uri=Settings.NEO4J_URL, username=Settings.NEO4J_USER, password=Settings.NEO4J_PASSWORD)
     logger.info("Visualizing and integrating Knowledge Graph into Neo4j...")
@@ -43,3 +60,56 @@ async def markdown_to_neo4j_kg(markdown_string: str):
     logger.info("Knowledge Graph visualized and integrated into Neo4j.")
     logger.info("Process Complete.")
     return {"status": "success", "message": "Knowledge graph created and integrated into Neo4j"}
+
+@knowledge_graph_router.get("/graph")
+async def get_graph():
+    """Retrieves the entire knowledge graph from Neo4j database.
+
+    Returns:
+        dict: Contains nodes and relationships of the graph.
+    """
+    logger.info("Fetching knowledge graph from Neo4j...")
+    try:
+        driver = GraphDatabase.driver(
+            Settings.NEO4J_URL,
+            auth=(Settings.NEO4J_USER, Settings.NEO4J_PASSWORD)
+        )
+
+        with driver.session() as session:
+            # Query to get all nodes
+            nodes_result = session.run("""
+                MATCH (n)
+                RETURN collect({
+                    id: id(n),
+                    labels: labels(n),
+                    properties: properties(n)
+                }) as nodes
+            """)
+            nodes = nodes_result.single()["nodes"]
+
+            # Query to get all relationships
+            rels_result = session.run("""
+                MATCH ()-[r]->() 
+                RETURN collect({
+                    id: id(r),
+                    type: type(r),
+                    properties: properties(r),
+                    source: id(startNode(r)),
+                    target: id(endNode(r))
+                }) as relationships
+            """)
+            relationships = rels_result.single()["relationships"]
+
+        driver.close()
+        logger.info("Successfully retrieved knowledge graph from Neo4j")
+        return {
+            "status": "success",
+            "data": {
+                "nodes": nodes,
+                "relationships": relationships
+            }
+        }
+
+    except Exception as e:
+        logger.error(f"Error fetching knowledge graph: {str(e)}")
+        return {"status": "error", "message": f"Failed to fetch knowledge graph: {str(e)}"}
