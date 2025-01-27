@@ -9,7 +9,7 @@ from ..middleware import logger
 from ..config import Settings
 
 @knowledge_graph_router.get("/knowledge-graph")
-def markdown_to_neo4j_kg(markdown_string: str):
+async def markdown_to_neo4j_kg(markdown_string: str):
     """
     Processes a markdown string, extracts knowledge using iText2KG, and adds it to a local Neo4j graph database.
 
@@ -42,4 +42,4 @@ def markdown_to_neo4j_kg(markdown_string: str):
     graph_integrator.visualize_graph(knowledge_graph=kg)
     logger.info("Knowledge Graph visualized and integrated into Neo4j.")
     logger.info("Process Complete.")
-    return {"knowledge_graph": "done"}
+    return {"status": "success", "message": "Knowledge graph created and integrated into Neo4j"}

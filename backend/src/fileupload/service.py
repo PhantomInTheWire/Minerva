@@ -22,7 +22,7 @@ from ..db.models import PDFDocument
 from fastapi import UploadFile
 from uuid import uuid4
 
-async def run_slow_processing(document_id: str, file_path: str):
+async def run_slow_processing(document_id: str, file_path: str) -> str:
     """
     Converts pdf to markdown slowly but reliably using marker/surya libs/models
     """
@@ -48,6 +48,7 @@ async def run_slow_processing(document_id: str, file_path: str):
             session.add(document)
             await session.commit()
             logger.info(f"Slow processing completed for document {document_id}")
+            return document.file_content
 
         except Exception as e:
             if not isinstance(e, APIError):
