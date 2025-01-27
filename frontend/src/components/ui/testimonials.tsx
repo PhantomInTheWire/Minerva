@@ -90,7 +90,7 @@ export const Testimonials = ({
         <ul
           ref={scrollerRef}
           className={cn(
-            " w-max min-w-full flex gap-4 shrink-0 py-4 flex-nowrap",
+            " w-max min-w-full flex gap-4 shrink-0 flex-nowrap",
             start && "animate-scroll ",
             pauseOnHover && "hover:[animation-play-state:paused]"
           )}
