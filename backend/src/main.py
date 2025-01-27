@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from .fileupload.router import upload_router
+from .knowledge_graphs.router import knowledge_graph_router
 from .middleware import register_middleware
 from .converter import init_converter
 
@@ -21,3 +22,4 @@ app = FastAPI(
 
 register_middleware(app)
 app.include_router(upload_router, prefix=f"/api/{version}", tags=["file_upload"])
+app.include_router(knowledge_graph_router, prefix=f"/api/{version}", tags=["knowledge_graph"])

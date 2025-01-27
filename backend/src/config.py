@@ -11,6 +11,10 @@ class Settings():
     REDIS_PASSWORD: str = os.getenv("REDIS_PASSWORD")
     MINIO_ACCESS_KEY: str = os.getenv("MINIO_ACCESS_KEY")
     MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY")
+    GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY")
+    NEO4J_USER: str = os.getenv("NEO4J_USER")
+    NEO4J_PASSWORD: str = os.getenv("NEO4J_PASSWORD")
+    NEO4J_URL: str = os.getenv("NEO4J_URL")
 
 
 Config = Settings()
