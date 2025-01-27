@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 from .service import KnowledgeGraphService
 from ..middleware import logger
 from ..error import handle_api_errors
@@ -12,7 +12,7 @@ async def markdown_to_neo4j_kg(markdown_string: str):
     Processes a markdown string, extracts knowledge using iText2KG, and adds it to a local Neo4j graph database.
 
     Args:
-        markdown_string: The large markdown string to process.
+        markdown_string: The markdown content to process, sent in request body.
 
     Returns:
         dict: Status and message indicating success or failure.

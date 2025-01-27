@@ -7,14 +7,6 @@ class KnowledgeGraphRepository:
     def __init__(self):
         self.db_manager = Neo4jConnectionManager()
 
-    def get_driver_info(self):
-        """Get Neo4j driver connection info."""
-        driver = self.db_manager.get_driver()
-        return {
-            'url': driver.url,
-            'auth': driver.auth
-        }
-
     def get_entire_graph(self):
         """Retrieve the entire knowledge graph from Neo4j."""
         try:
