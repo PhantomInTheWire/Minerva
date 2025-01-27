@@ -6,7 +6,8 @@ from .error import (
     FileDeleteError,
     DatabaseCommitError,
     PDFProcessingError,
-    APIError
+    APIError,
+    FileProcessingError
 )
 from ..converter import get_converter
 from ..middleware import logger
@@ -22,6 +23,9 @@ from fastapi import UploadFile
 from uuid import uuid4
 
 async def run_slow_processing(document_id: str, file_path: str):
+    """
+    Converts pdf to markdown slowly but reliably using marker/surya libs/models
+    """
     async with SessionLocal() as session:
         try:
             document = await session.get(PDFDocument, document_id)
@@ -104,5 +108,4 @@ async def full_upload_process(file: UploadFile, session: AsyncSession) -> tuple[
         document = await create_document_record(session, file.filename, fast_text)
         return document, file_path
     except Exception as e:
-        logger.error(f"Error during processing of file {str(e)}")
-        raise
+        raise FileProcessingError(f"Error in processing file: {str(e)}") from e
