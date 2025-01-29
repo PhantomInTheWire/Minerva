@@ -18,11 +18,11 @@ class GraphCreationService:
 
         logger.info("Starting markdown processing...")
         llm = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash-exp",
+            model="gemini-1.5-flash-8b",
             temperature=0.7
         )
         embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001"
+            model="models/text-embedding-004"
         )
         logger.info("LLM and Embedding Models initialized.")
 
@@ -44,7 +44,6 @@ class GraphCreationService:
             logger.error(f"Error building knowledge graph: {str(e)}")
             raise KnowledgeGraphError(f"Failed to build knowledge graph", {"error": str(e)})
 
-        # Use the db_manager instance to get connection details
         graph_integrator = GraphIntegrator(
             uri=self.db_manager.neo4j_url,
             username=self.db_manager.neo4j_user,
