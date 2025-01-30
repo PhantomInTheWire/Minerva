@@ -1,16 +1,34 @@
+"use client";
+
 import { Button } from "@/components/ui";
+import { motion } from "framer-motion";
 import { PRICES } from "./data";
 
 export default function Pricing() {
   return (
     <>
-      <h1 className="text-[2.5rem] font-semibold">
+      <motion.h1
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className="text-[2.5rem] font-semibold"
+      >
         Save hours, learn smarter.
-      </h1>
-      <p className=" text-muted-foreground">
+      </motion.h1>
+      <motion.p
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className=" text-muted-foreground"
+      >
         Enjoy endless content uploads, chats, recorded lectures, and more.
-      </p>
-      <div className="w-[50%] flex items-center justify-center gap-6 mt-12">
+      </motion.p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className="w-[50%] flex items-center justify-center gap-6 mt-12"
+      >
         {PRICES.map((price, idx) => (
           <div
             key={idx}
@@ -51,7 +69,7 @@ export default function Pricing() {
             </Button>
           </div>
         ))}
-      </div>
+      </motion.div>
     </>
   );
 }
