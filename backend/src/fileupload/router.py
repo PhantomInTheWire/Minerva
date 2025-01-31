@@ -5,6 +5,7 @@ from .service import run_slow_processing, full_upload_process
 from ..db.main import get_session
 from ..db.models import PDFDocument
 from ..knowledge_graphs.router import markdown_to_neo4j_kg
+from ..middleware import logger
 
 upload_router = APIRouter()
 
@@ -27,7 +28,7 @@ async def create_document(
         
         async def process_and_create_kg(doc_id: str, file_path: str):
             markdown_content = await run_slow_processing(doc_id, file_path)
-            await markdown_to_neo4j_kg(markdown_content)
+            logger.info(await markdown_to_neo4j_kg(markdown_content))
             
         background_tasks.add_task(process_and_create_kg, doc.id, path)
         return doc

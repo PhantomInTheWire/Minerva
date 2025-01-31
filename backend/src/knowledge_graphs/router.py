@@ -18,7 +18,8 @@ async def markdown_to_neo4j_kg(markdown_string: str):
         dict: Status and message indicating success or failure.
     """
     service = KnowledgeGraphService()
-    return await service.create_knowledge_graph(markdown_string)
+    logger.info(await service.create_knowledge_graph(markdown_string))
+    return {"status": "success", "message": "Knowledge graph created and integrated into Neo4j"}
 
 @knowledge_graph_router.get("/graph")
 @handle_api_errors
