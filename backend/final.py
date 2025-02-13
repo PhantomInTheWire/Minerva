@@ -12,6 +12,10 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_google_genai import GoogleGenerativeAI
 from langchain_text_splitters import TokenTextSplitter
 from pydantic import BaseModel, Field
+from langchain.output_parsers import PydanticOutputParser
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import BaseOutputParser
+
 
 os.environ["NEO4J_URI"] = "bolt://localhost:7687"
 os.environ["NEO4J_USERNAME"] = "neo4j"
@@ -91,11 +95,6 @@ class Extraction(BaseModel):
     atomic_facts: List[AtomicFact] = Field(description="List of atomic facts")
 
 model = GoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0)
-
-from langchain.output_parsers import PydanticOutputParser
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import BaseOutputParser
-
 class CustomOutputParser(BaseOutputParser):
     def parse(self, text):
         try:
@@ -218,7 +217,7 @@ def num_tokens_from_string(string: str) -> int:
     return num_tokens
 
 async def main():
-    await process_document(text, "RTI India", chunk_size=500, chunk_overlap=50)
+    await process_document(text, text[:10], chunk_size=1000, chunk_overlap=200)
 
 if __name__ == "__main__":
     asyncio.run(main())
