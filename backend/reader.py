@@ -110,6 +110,7 @@ def rational_plan_node(state: InputState) -> OverallState:
     print(f"Rational plan: {rational_plan}")
     return {
         "rational_plan": rational_plan,
+        "notebook": "",
         "previous_actions": ["rational_plan"],
     }
 
@@ -471,7 +472,7 @@ Chunk: {chunk}"""
 chunk_read_chain = chunk_read_prompt | model.with_structured_output(ChunkOutput)
 
 def get_subsequent_chunk_id(chunk):
-    data = neo4j_graph.query("""
+    data = graph.query("""
     MATCH (c:Chunk)-[:NEXT]->(next)
     WHERE c.id = $id
     RETURN next.id AS next
@@ -479,7 +480,7 @@ def get_subsequent_chunk_id(chunk):
     return data
 
 def get_previous_chunk_id(chunk):
-    data = neo4j_graph.query("""
+    data = graph.query("""
     MATCH (c:Chunk)<-[:NEXT]-(previous)
     WHERE c.id = $id
     RETURN previous.id AS previous
@@ -790,6 +791,6 @@ langgraph.add_edge("answer_reasoning", END)
 
 langgraph = langgraph.compile()
 print("----------------------------")
-state = langgraph.invoke({"question":""" tell me about Development of Framework to Measure Sustainability Index Of Transportation Systems In Indian Metropolitan Cities"""})
+state = langgraph.invoke({"question":""" tell me about interflow"""})
 print("----------------------------")
 print(state['answer'])

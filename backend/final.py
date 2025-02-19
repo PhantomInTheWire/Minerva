@@ -33,7 +33,7 @@ os.environ["GOOGLE_API_KEY"]="AIzaSyASNOYxWqb_JI7TDXPZDIKt6S-uCJkj1sg"
 
 
 
-with open('table.md', 'r') as f:
+with open('file.md', 'r') as f:
     text = f.read()
 
 construction_system = """
