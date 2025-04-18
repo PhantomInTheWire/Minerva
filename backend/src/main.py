@@ -11,7 +11,7 @@ version="v1"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("lifespan")
-    await init_converter()
+    # await init_converter()
     yield
 
 app = FastAPI(

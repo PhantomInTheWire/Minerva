@@ -30,7 +30,7 @@ async def create_document(
             markdown_content = await run_slow_processing(doc_id, file_path)
             # logger.info(await markdown_to_neo4j_kg(markdown_content))
             
-        background_tasks.add_task(process_and_create_kg, doc.id, path)
+        # background_tasks.add_task(process_and_create_kg, doc.id, path)
         return doc
     except Exception as e:
         raise FileProcessingError(f"Error in processing file: {str(e)}") from e
