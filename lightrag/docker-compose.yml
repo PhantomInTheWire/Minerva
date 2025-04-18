@@ -8,6 +8,7 @@ services:
       - ./data/inputs:/app/data/inputs
       - ./config.ini:/app/config.ini
       - ./.env:/app/.env
+      - ./lightrag/lightrag_webui:/app/lightrag/lightrag_webui
     env_file:
       - .env
     restart: unless-stopped

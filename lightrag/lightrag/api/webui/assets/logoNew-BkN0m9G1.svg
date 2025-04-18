@@ -1,0 +1,48 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Abstract representation of knowledge transformation -->
+  <defs>
+    <!-- Gradient for the flowing data effect -->
+    <linearGradient id="dataFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EA4335" />
+      <stop offset="50%" stop-color="#4285F4" />
+      <stop offset="100%" stop-color="#34A853" />
+    </linearGradient>
+    
+    <!-- Dots pattern for the background -->
+    <pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#f0f0f0" />
+    </pattern>
+  </defs>
+  
+  <!-- Abstract background representing vector space -->
+  <rect x="0" y="0" width="300" height="300" fill="white" />
+  <rect x="0" y="0" width="300" height="300" fill="url(#dots)" opacity="0.5" />
+  
+  <!-- Abstract central node -->
+  <circle cx="150" cy="150" r="60" fill="#4285F4" opacity="0.2" />
+  <circle cx="150" cy="150" r="40" fill="#4285F4" opacity="0.6" />
+  
+  <!-- Abstract knowledge connections -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Flowing data from left (input) -->
+    <path d="M 30,120 C 70,120 90,140 150,150" stroke="url(#dataFlow)" stroke-width="10" fill="none" />
+    <path d="M 30,180 C 70,180 90,160 150,150" stroke="url(#dataFlow)" stroke-width="10" fill="none" />
+    
+    <!-- Flowing data to right (output) -->
+    <path d="M 150,150 C 210,140 230,120 270,120" stroke="#34A853" stroke-width="10" fill="none" opacity="0.8" />
+    <path d="M 150,150 C 210,160 230,180 270,180" stroke="#34A853" stroke-width="10" fill="none" opacity="0.8" />
+  </g>
+  
+  <!-- Abstract nodes representing knowledge points -->
+  <circle cx="80" cy="120" r="12" fill="#EA4335" />
+  <circle cx="60" cy="180" r="12" fill="#FBBC05" />
+  <circle cx="220" cy="120" r="12" fill="#34A853" />
+  <circle cx="240" cy="180" r="12" fill="#4285F4" />
+  
+  <!-- Central connecting point -->
+  <circle cx="150" cy="150" r="18" fill="white" stroke="#4285F4" stroke-width="4" />
+  
+  <!-- Orbital rings suggesting knowledge embedding -->
+  <ellipse cx="150" cy="150" rx="70" ry="25" fill="none" stroke="#4285F4" stroke-width="2" transform="rotate(45 150 150)" opacity="0.4" />
+  <ellipse cx="150" cy="150" rx="80" ry="30" fill="none" stroke="#34A853" stroke-width="2" transform="rotate(-30 150 150)" opacity="0.4" />
+</svg>
