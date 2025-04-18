@@ -70,10 +70,11 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
+    border: var(--border);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 
@@ -104,3 +105,8 @@ body {
     transform: translateY(0);
   }
 }
+
+video {
+  user-select: none;
+}
+

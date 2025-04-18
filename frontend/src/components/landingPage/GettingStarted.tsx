@@ -1,11 +1,34 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { STEPS } from "./data";
 
 export default function GettingStarted() {
   return (
     <>
-      <h1 className="text-[2.5rem] font-semibold">Getting Started</h1>
-      <p className=" text-muted-foreground">by following just 3 simple steps</p>
-      <div className="w-[70%] grid grid-cols-3 gap-6 mt-12">
+      <motion.h1
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className="text-[2.5rem] font-semibold"
+      >
+        Getting Started
+      </motion.h1>
+      <motion.p
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className=" text-muted-foreground"
+      >
+        by following just 3 simple steps
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className="w-[70%] grid grid-cols-3 gap-6 mt-12"
+      >
         {STEPS.map((step, idx) => (
           <div
             key={idx}
@@ -15,7 +38,7 @@ export default function GettingStarted() {
             <p className="text-muted-foreground">{step.desc}</p>
           </div>
         ))}
-      </div>
+      </motion.div>
     </>
   );
 }

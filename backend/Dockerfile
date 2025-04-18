@@ -1,17 +1,25 @@
-FROM python:3.11-slim
+# === Stage 1: Build ===
+FROM python:3.11-slim AS builder
 
-# Set the working directory in the container
-WORKDIR /backend/
+WORKDIR /backend
 
-# Copy setup files
 COPY pyproject.toml uv.lock ./
-RUN pip install uv
-RUN uv venv && uv sync
-RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
-    libglib2.0-0
-# Copy the rest of the files
+RUN pip install --no-cache-dir uv && \
+    uv venv && uv sync
+
 COPY . .
 
-# Set the default command to run the application
+# === Stage 2: Runtime ===
+FROM python:3.11-slim
+
+WORKDIR /backend
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx \
+    libglib2.0-0 && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /backend/ /backend/
+
 CMD ["/bin/sh", "-c", ". .venv/bin/activate && alembic upgrade head && fastapi dev src/main.py --port 8000 --host 0.0.0.0"]
+

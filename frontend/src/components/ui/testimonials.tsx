@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import TestimonialCard from "./testimonial-card";
 
@@ -78,9 +79,26 @@ export const Testimonials = ({
   };
   return (
     <div className="flex flex-col items-center pt-20">
-      <h1 className="text-[2.5rem] font-semibold">{title}</h1>
-      <p className=" text-muted-foreground">{desc}</p>
-      <div
+      <motion.h1
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className="text-[2.5rem] font-semibold"
+      >
+        {title}
+      </motion.h1>
+      <motion.p
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
+        className=" text-muted-foreground"
+      >
+        {desc}
+      </motion.p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
+        whileInView={{ opacity: 1 }}
         ref={containerRef}
         className={cn(
           "mt-12 scroller relative z-20  max-w-7xl overflow-hidden  [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
@@ -90,7 +108,7 @@ export const Testimonials = ({
         <ul
           ref={scrollerRef}
           className={cn(
-            " w-max min-w-full flex gap-4 shrink-0 py-4 flex-nowrap",
+            " w-max min-w-full flex gap-4 shrink-0 flex-nowrap",
             start && "animate-scroll ",
             pauseOnHover && "hover:[animation-play-state:paused]"
           )}
@@ -104,7 +122,7 @@ export const Testimonials = ({
             </li>
           ))}
         </ul>
-      </div>
+      </motion.div>
     </div>
   );
 };

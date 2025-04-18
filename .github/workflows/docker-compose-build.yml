@@ -12,7 +12,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # Step 0: Free Space
     steps:
+    - name: Free up disk space
+      run: |
+        sudo apt-get clean
+        sudo rm -rf /usr/local/lib/android /opt/ghc /usr/share/dotnet
+        docker system prune -a -f
+
     # Step 1: Checkout Code
     - name: Checkout Code
       uses: actions/checkout@v4

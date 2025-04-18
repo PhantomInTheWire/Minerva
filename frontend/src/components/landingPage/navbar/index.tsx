@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui";
+import Button from "@/components/ui/Button";
 import Theme from "./Theme";
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
