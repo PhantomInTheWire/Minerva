@@ -48,7 +48,7 @@ export default function Features() {
         initial={{ opacity: 0 }}
         transition={{ ease: "easeInOut", delay: 0.3, duration: 0.8 }}
         whileInView={{ opacity: 1 }}
-        className="flex w-[70%] min-h-[40rem] py-8 mt-12 bg-muted border-2 border-border rounded-2xl overflow-hidden relative"
+        className="flex w-[70%] min-h-[40rem] py-8 mt-12 bg-muted border-2 border rounded-2xl overflow-hidden relative"
       >
         <div className="w-2/5 px-6 space-y-4">
           <h2 className="font-medium text-xl">
@@ -72,7 +72,7 @@ export default function Features() {
         {FEATURES.map((feature, idx) => (
           <div
             key={idx}
-            className="1/3 flex flex-col px-8 py-10 mt-6 bg-muted border-2 border-border rounded-2xl space-y-3"
+            className="1/3 flex flex-col px-8 py-10 mt-6 bg-muted border-2 border rounded-2xl space-y-3"
           >
             <h2 className="text-xl font-medium">{feature.title}</h2>
             <p className="text-muted-foreground">{feature.desc}</p>

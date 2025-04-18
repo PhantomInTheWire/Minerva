@@ -23,7 +23,7 @@ export default function MarkdownRenderer(props: { theme?: "light" | "dark" }) {
     <div
       className={`w-full h-screen flex bg-background text-foreground theme-${theme}`}
     >
-      <div className="w-1/2 h-full flex flex-col items-center relative border-r-[1px] border-border">
+      <div className="w-1/2 h-full flex flex-col items-center relative border-r-[1px] border">
         <textarea
           className="w-full h-full outline-none px-4 py-4"
           value={markdownInput}

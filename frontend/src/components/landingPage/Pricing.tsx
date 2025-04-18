@@ -36,7 +36,7 @@ export default function Pricing() {
               price.isPrimary
                 ? "bg-foreground dark:bg-muted text-background"
                 : "bg-background"
-            } border-2 border-border rounded-3xl space-y-3`}
+            } border-2 border rounded-3xl space-y-3`}
           >
             <p>{price.title}</p>
             <p>
@@ -50,7 +50,7 @@ export default function Pricing() {
               className={`border-t-2 mt-2 py-4 space-y-2 ${
                 price.isPrimary
                   ? "border-muted-foreground text-muted-foreground"
-                  : "border-border text-"
+                  : "border text-"
               }`}
             >
               {price.features.map((feature, idx) => (
