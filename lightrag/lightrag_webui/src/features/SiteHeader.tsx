@@ -1,5 +1,5 @@
 import Button from '@/components/ui/Button'
-import { SiteInfo, webuiPrefix } from '@/lib/constants'
+import { webuiPrefix } from '@/lib/constants'
 import AppSettings from '@/components/AppSettings'
 import { TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { useSettingsStore } from '@/stores/settings'
@@ -71,8 +71,8 @@ export default function SiteHeader() {
       <div className="min-w-[200px] w-auto flex items-center">
         <a href={webuiPrefix} className="flex items-center gap-2">
           <ZapIcon className="size-4 text-emerald-400" aria-hidden="true" />
-          {/* <img src='/logo.png' className="size-4" /> */}
-          <span className="font-bold md:inline-block">{SiteInfo.name}</span>
+          {/* <img src='/logoNew.svg' className="size-4 dark:invert dark:grayscale" /> */}
+          <span className="font-bold md:inline-block">Web UI</span>
         </a>
         {webuiTitle && (
           <div className="flex items-center">
@@ -112,7 +112,7 @@ export default function SiteHeader() {
             </span>
           )}
           <Button variant="ghost" size="icon" side="bottom" tooltip={t('header.projectRepository')}>
-            <a href={SiteInfo.github} target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
               <GithubIcon className="size-4" aria-hidden="true" />
             </a>
           </Button>

@@ -134,11 +134,11 @@ const LoginPage = () => {
         <CardHeader className="flex items-center justify-center space-y-2 pb-8 pt-6">
           <div className="flex flex-col items-center space-y-4">
             <div className="flex items-center gap-3">
-              <img src="logo.png" alt="LightRAG Logo" className="h-12 w-12" />
+              <img src="logoNew.svg" alt="Web UI Logo" className="h-12 w-12 dark:invert dark:grayscale" />
               <ZapIcon className="size-10 text-emerald-400" aria-hidden="true" />
             </div>
             <div className="text-center space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight">LightRAG</h1>
+              <h1 className="text-3xl font-bold tracking-tight">Web UI</h1>
               <p className="text-muted-foreground text-sm">
                 {t('login.description')}
               </p>
