@@ -1,0 +1,267 @@
+basePath: /
+definitions:
+  handlers.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  models.Idea:
+    properties:
+      content:
+        type: string
+      item_id:
+        type: integer
+    type: object
+  models.Item:
+    properties:
+      item_id:
+        type: integer
+      timestamp:
+        type: string
+      type:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.ItemTag:
+    properties:
+      item_id:
+        type: integer
+      tag_id:
+        type: integer
+    type: object
+  models.Tag:
+    properties:
+      name:
+        type: string
+      tag_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      password_hash:
+        type: string
+      user_id:
+        type: integer
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is the API for the Supermemory application.
+  title: Supermemory API
+  version: "1.0"
+paths:
+  /ideas/{id}:
+    get:
+      description: Get an idea's information by its ID.
+      parameters:
+      - description: Idea ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Idea'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get an idea by ID
+  /item-tags:
+    post:
+      consumes:
+      - application/json
+      description: Associate an existing tag with an existing item.
+      parameters:
+      - description: ItemTag object to be created
+        in: body
+        name: itemTag
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemTag'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ItemTag'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Add a tag to an item
+  /tags:
+    post:
+      consumes:
+      - application/json
+      description: Create a new tag with the provided details.
+      parameters:
+      - description: Tag object to be created
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tag'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Tag'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Create a new tag
+  /tags/{tagId}/items:
+    get:
+      description: Get all items associated with a specific tag ID.
+      parameters:
+      - description: Tag ID
+        in: path
+        name: tagId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Item'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get items by tag ID
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided username, email, and password.
+      parameters:
+      - description: User object to be created
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Create a new user
+  /users/{id}:
+    get:
+      description: Get a user's information by their ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get a user by ID
+  /users/{userId}/ideas:
+    post:
+      consumes:
+      - application/json
+      description: Create a new idea associated with a specific user ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Idea object to be created
+        in: body
+        name: idea
+        required: true
+        schema:
+          $ref: '#/definitions/models.Idea'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Idea'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Create a new idea for a user
+swagger: "2.0"

@@ -1,5 +1,11 @@
 package main
 
+// @title Supermemory API
+// @version 1.0
+// @description This is the API for the Supermemory application.
+// @host localhost:8080
+// @BasePath /
+
 import (
 	"database/sql"
 	"fmt"
@@ -9,6 +15,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+	_ "supermemory/docs"
 )
 
 const (
@@ -76,4 +85,7 @@ func setupRoutes(r *gin.Engine) {
 	r.POST("/tags", h.CreateTag)
 	r.POST("/item-tags", h.AddTagToItem)
 	r.GET("/tags/:tagId/items", h.GetItemsByTag)
+
+	// Swagger UI
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
