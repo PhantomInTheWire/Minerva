@@ -1,6 +1,10 @@
 import React from 'react';
 import OriginalButton from '@/components/ui/Button';
-import { Button as CopiedButton } from '@/components/ui/button2'; // Assuming button2.tsx is the copied one
+import { Button as CopiedButton } from '@/components/ui/button2'; /**
+ * Renders a demo page displaying both the original and copied button components for comparison.
+ *
+ * The page includes headings and sections for each button, allowing users to view and interact with both button implementations.
+ */
 
 export default function ButtonsDemoPage() {
   return (

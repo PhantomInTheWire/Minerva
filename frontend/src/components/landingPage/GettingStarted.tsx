@@ -3,6 +3,11 @@
 import { motion } from "framer-motion";
 import { STEPS } from "./data";
 
+/**
+ * Renders an animated "Getting Started" section with a heading, subtitle, and a three-step guide.
+ *
+ * The heading, subtitle, and steps container fade in as they enter the viewport. Each step displays a title and description sourced from the {@link STEPS} array.
+ */
 export default function GettingStarted() {
   return (
     <>

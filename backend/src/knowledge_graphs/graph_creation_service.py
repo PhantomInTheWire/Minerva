@@ -8,11 +8,24 @@ from .db_manager import Neo4jConnectionManager
 
 class GraphCreationService:
     def __init__(self):
+        """
+        Initializes the GraphCreationService with repository and database connection manager instances.
+        """
         self.repository = KnowledgeGraphRepository()
         self.db_manager = Neo4jConnectionManager() # Create an instance of Neo4jConnectionManager
 
     async def create_knowledge_graph(self, markdown_string: str) -> dict:
-        """Process markdown and create knowledge graph in Neo4j."""
+        """
+        Processes a markdown string to create and integrate a knowledge graph into a Neo4j database.
+        
+        Validates and sanitizes the input markdown, constructs a knowledge graph using language and embedding models, and integrates the resulting graph into Neo4j. Raises a `KnowledgeGraphError` if the markdown is empty or if graph construction fails.
+        
+        Args:
+            markdown_string: The markdown content to be converted into a knowledge graph.
+        
+        Returns:
+            A dictionary indicating the success status and a message upon successful integration.
+        """
         if not markdown_string:
             raise KnowledgeGraphError("Empty markdown string provided")
 

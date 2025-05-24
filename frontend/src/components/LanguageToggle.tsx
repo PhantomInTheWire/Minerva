@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { useSettingsStore } from '@/stores/settings'
 
 /**
- * Component that toggles the language between English and Chinese.
+ * React component that displays a button to toggle the application's language between English and Chinese.
+ *
+ * The button label and tooltip indicate the target language. Clicking the button updates both the i18n instance and the application's settings store to reflect the selected language.
  */
 export default function LanguageToggle() {
   const { i18n } = useTranslation()

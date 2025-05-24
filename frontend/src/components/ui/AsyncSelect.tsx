@@ -65,6 +65,17 @@ export interface AsyncSelectProps<T> {
   clearable?: boolean
 }
 
+/**
+ * Renders a generic asynchronous select dropdown that fetches and displays options based on user input or initial value.
+ *
+ * Supports debounced searching, optional preloading of all options, customizable filtering, and flexible rendering for various data shapes. Displays loading and error states, allows clearing the selection, and provides accessibility features.
+ *
+ * @template T - The type of the selectable option objects.
+ *
+ * @param props - Component props for configuring fetching, rendering, filtering, and behavior.
+ *
+ * @returns A React element representing the async select dropdown.
+ */
 export function AsyncSelect<T>({
   fetcher,
   preload,
@@ -269,6 +280,11 @@ export function AsyncSelect<T>({
   )
 }
 
+/**
+ * Displays a default loading skeleton for the options list in the async select dropdown.
+ *
+ * Renders a placeholder UI with animated blocks to indicate loading state while options are being fetched.
+ */
 function DefaultLoadingSkeleton() {
   return (
     <CommandGroup>

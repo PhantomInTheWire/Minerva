@@ -13,6 +13,11 @@ const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
 });
 
 
+/**
+ * Renders an interactive, theme-aware 2D force-directed knowledge graph visualization.
+ *
+ * Fetches graph data asynchronously, displays loading, error, or empty states as appropriate, and visualizes nodes and relationships with custom canvas rendering. Supports node centering and zoom on click, node dragging, and hover highlighting. Adapts colors and styles to the current UI theme.
+ */
 export default function KnowledgeGraph() {
   const { theme } = useTheme();
   const [graphData, setGraphData] = useState<GraphData | null>(null);

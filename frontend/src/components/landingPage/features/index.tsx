@@ -9,6 +9,11 @@ import { FEATURES } from "@/components/landingPage/data";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Renders a section showcasing product features with animated headings, descriptions, and feature cards.
+ *
+ * Includes scroll-triggered animations using GSAP and framer-motion to enhance user engagement as elements fade in and move into view. The section highlights key product capabilities and presents them in a visually dynamic layout.
+ */
 export default function Features() {
   const containerRef = useRef(null);
 

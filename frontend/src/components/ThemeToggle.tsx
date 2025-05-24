@@ -6,7 +6,9 @@ import { controlButtonVariant } from '@/lib/constants'
 import { useTranslation } from 'react-i18next'
 
 /**
- * Component that toggles the theme between light and dark.
+ * React component that displays a button to toggle the application theme between light and dark modes.
+ *
+ * The button icon and tooltip update dynamically based on the current theme. Clicking the button switches to the opposite theme.
  */
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()

@@ -22,6 +22,14 @@ interface PipelineStatusDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
+/**
+ * Displays a modal dialog showing the current status and history of a pipeline job, with adjustable horizontal positioning.
+ *
+ * The dialog periodically fetches and updates pipeline status information while open, including job details, progress, and message history. Users can reposition the dialog to the left, center, or right of the screen. The message history view auto-scrolls to the latest message unless the user manually scrolls up.
+ *
+ * @param open - Whether the dialog is visible.
+ * @param onOpenChange - Callback invoked when the dialog's open state changes.
+ */
 export default function PipelineStatusDialog({
   open,
   onOpenChange

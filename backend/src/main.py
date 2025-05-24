@@ -10,6 +10,11 @@ version="v1"
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """
+    Manages application startup and shutdown events for the FastAPI app.
+    
+    This async context manager is invoked during the application's lifespan, allowing for setup or teardown logic to be executed as needed.
+    """
     print("lifespan")
     # await init_converter()
     yield

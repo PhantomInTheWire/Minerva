@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * Displays a visually styled loading indicator for graph data.
+ *
+ * Renders a centered spinner with a pulsing "Loading graph data..." message, intended to provide feedback while graph data is being loaded.
+ */
 export function LoadingState() {
   return (
     <div className="relative flex h-[600px] items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-background/50 to-background/10 backdrop-blur-lg">
@@ -12,6 +17,11 @@ export function LoadingState() {
   );
 }
 
+/**
+ * Displays a styled error state with an icon and the provided error message.
+ *
+ * @param error - The error message to display.
+ */
 export function ErrorState({ error }: { error: string }) {
   return (
     <div className="relative flex h-[600px] items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-destructive/10 to-destructive/5 backdrop-blur-lg">
@@ -28,6 +38,11 @@ export function ErrorState({ error }: { error: string }) {
   );
 }
 
+/**
+ * Displays a visual placeholder indicating that no graph data is available.
+ *
+ * Renders a centered informational icon and message within a styled container to communicate the absence of graph data.
+ */
 export function EmptyState() {
   return (
     <div className="relative flex h-[600px] items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-background/50 to-background/10 backdrop-blur-lg">

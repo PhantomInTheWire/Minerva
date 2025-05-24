@@ -9,6 +9,16 @@ interface EmptyCardProps extends React.ComponentPropsWithoutRef<typeof Card> {
   icon?: React.ComponentType<{ className?: string }>
 }
 
+/**
+ * Renders a stylized empty state card with an icon, title, optional description, and optional action element.
+ *
+ * @param title - The main heading displayed in the card.
+ * @param description - Optional descriptive text shown below the title.
+ * @param icon - Optional icon component to display; defaults to a generic files icon.
+ * @param action - Optional React node rendered as an action element at the bottom of the card.
+ *
+ * @returns A React element representing the empty state card.
+ */
 export default function EmptyCard({
   title,
   description,

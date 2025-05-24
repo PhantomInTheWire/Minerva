@@ -29,6 +29,13 @@ const NodeOption = ({ id }: { id: string }) => {
   return <NodeById id={id} />
 }
 
+/**
+ * Renders a search result option based on its type.
+ *
+ * Displays a node, edge, or informational message according to the {@link item}'s type.
+ *
+ * @param item - The search result option to render.
+ */
 function OptionComponent(item: OptionItem) {
   return (
     <div>

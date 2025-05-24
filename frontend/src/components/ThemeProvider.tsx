@@ -18,7 +18,11 @@ const initialState: ThemeProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 /**
- * Component that provides the theme state and setter function to its children.
+ * Provides theme context to descendant components and applies the selected theme to the document root.
+ *
+ * Dynamically updates the root element's class based on the current theme setting, supporting 'light', 'dark', and 'system' modes. When set to 'system', the theme automatically follows the user's OS-level color scheme preference.
+ *
+ * @param children - React nodes to receive the theme context.
  */
 export default function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const theme = useSettingsStore.use.theme()

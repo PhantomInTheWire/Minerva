@@ -6,7 +6,17 @@ from fastapi import UploadFile
 from ..error import FileSaveError, FileDeleteError
 
 async def save_pdf_file(file: UploadFile) -> str:
-    """Save uploaded PDF file with UUID prefix"""
+    """
+    Asynchronously saves an uploaded PDF file to the local "uploads" directory with a unique UUID-prefixed filename.
+    
+    The function ensures the target directory exists, writes the file content in chunks to avoid blocking the event loop, and returns the full path to the saved file. Raises a FileSaveError if saving fails.
+    
+    Args:
+        file: The uploaded PDF file to be saved.
+    
+    Returns:
+        The file path of the saved PDF file.
+    """
     try:
         upload_dir = "uploads"
         os.makedirs(upload_dir, exist_ok=True)
@@ -20,7 +30,12 @@ async def save_pdf_file(file: UploadFile) -> str:
         raise FileSaveError(f"Failed to save file: {str(e)}") from e
 
 async def remove_file(file_path: str):
-    """Remove a file from the filesystem"""
+    """
+    Asynchronously deletes a file at the specified path if it exists.
+    
+    Raises:
+        FileDeleteError: If the file cannot be deleted.
+    """
     if os.path.exists(file_path):
         try:
             await asyncio.get_event_loop().run_in_executor(None, os.remove, file_path)
