@@ -11,6 +11,13 @@ interface AppSettingsProps {
   className?: string
 }
 
+/**
+ * Renders a popover UI for selecting application language and theme preferences.
+ *
+ * Displays a button with a palette icon that opens a popover containing dropdowns for language and theme selection. Updates the global settings store when a new language or theme is chosen. Supports internationalized labels and accepts an optional class name for custom styling.
+ *
+ * @param className - Optional additional class name for the trigger button.
+ */
 export default function AppSettings({ className }: AppSettingsProps) {
   const [opened, setOpened] = useState<boolean>(false)
   const { t } = useTranslation()

@@ -17,9 +17,10 @@ async def create_document(
         background_tasks: BackgroundTasks = BackgroundTasks(),
 ):
     """
-    Create a new PDF document.
-    converts pdf to markdown and saves it to the db.
-    """
+        Creates a new PDF document from an uploaded file.
+        
+        Validates that the uploaded file is a PDF, processes and stores it in the database, and returns the created document. Raises an error if the file type is invalid or if processing fails.
+        """
     if not file.filename.lower().endswith('.pdf'):
         raise InvalidFileTypeError("Only PDF files allowed")
 
@@ -27,6 +28,11 @@ async def create_document(
         doc, path = await full_upload_process(file, session)
         
         async def process_and_create_kg(doc_id: str, file_path: str):
+            """
+            Processes a document to generate markdown content for knowledge graph creation.
+            
+            Awaits slow processing of the document and file path to produce markdown content, which can be used for further knowledge graph generation.
+            """
             markdown_content = await run_slow_processing(doc_id, file_path)
             # logger.info(await markdown_to_neo4j_kg(markdown_content))
             

@@ -11,14 +11,38 @@ import asyncio
 import pymupdf4llm
 
 def extract_fast_text(file_path: str) -> str:
-    """Extract text using pymupdf4llm (fast)"""
+    """
+    Extracts markdown-formatted text from a PDF file using fast extraction.
+    
+    Attempts to convert the PDF at the given file path to markdown using the
+    `pymupdf4llm` library. Raises a `PDFProcessingError` if extraction fails.
+    
+    Args:
+        file_path: Path to the PDF file.
+    
+    Returns:
+        Extracted text in markdown format.
+    
+    Raises:
+        PDFProcessingError: If text extraction fails.
+    """
     try:
         return pymupdf4llm.to_markdown(file_path)
     except Exception as e:
         raise PDFProcessingError(f"Fast text extraction failed: {str(e)}") from e
 
 async def process_pdf_slow(file_path: str) -> str:
-    """Converts pdf to markdown slowly but reliably using marker/surya libs/models"""
+    """
+    Asynchronously extracts markdown-formatted text from a PDF file using external converter and rendering utilities.
+    
+    Attempts to obtain a converter instance and processes the PDF in executor threads to avoid blocking the event loop. Raises a ConverterInitializationError if the converter cannot be initialized. Wraps unexpected exceptions in an APIError, while re-raising known file processing errors.
+    
+    Args:
+        file_path: Path to the PDF file to be processed.
+    
+    Returns:
+        Extracted markdown-formatted text from the PDF.
+    """
     try:
         converter = get_converter()
         if not converter:

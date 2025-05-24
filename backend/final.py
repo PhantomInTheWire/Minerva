@@ -97,6 +97,14 @@ class Extraction(BaseModel):
 model = GoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0)
 class CustomOutputParser(BaseOutputParser):
     def parse(self, text):
+        """
+        Parses model output text into a standardized JSON structure for atomic fact extraction.
+        
+        Attempts to extract a JSON object from the input text. If the text is not valid JSON, tries to correct common formatting issues or parse a custom bullet-point format. Returns a JSON string containing an "atomic_facts" array, each with "key_elements" and "atomic_fact" fields.
+        
+        Raises:
+            ValueError: If the input cannot be parsed into the expected structure.
+        """
         try:
             import re
             import json
@@ -150,6 +158,11 @@ class CustomOutputParser(BaseOutputParser):
             raise ValueError(f"Failed to parse output: {str(e)}")
 
     def get_format_instructions(self):
+        """
+        Returns format instructions for the output parser.
+        
+        This implementation returns an empty string, indicating no specific format instructions are provided.
+        """
         return ""
 
 custom_parser = CustomOutputParser()
@@ -157,6 +170,15 @@ parser = PydanticOutputParser(pydantic_object=Extraction)
 construction_chain = construction_prompt | model | custom_parser | parser
 
 def encode_md5(text):
+    """
+    Returns the MD5 hash of the given text as a hexadecimal string.
+    
+    Args:
+        text: The input string to hash.
+    
+    Returns:
+        The hexadecimal MD5 hash of the input text.
+    """
     return md5(text.encode("utf-8")).hexdigest()
 
 import_query = """
@@ -180,6 +202,17 @@ MERGE (a)-[:HAS_KEY_ELEMENT]->(k)
 """
 
 async def process_document(text, document_name, chunk_size=4000, chunk_overlap=200):
+    """
+    Processes a text document by extracting atomic facts and key elements from overlapping chunks and importing the structured data into a Neo4j graph database.
+    
+    The function splits the input text into overlapping chunks, asynchronously extracts atomic facts and key elements from each chunk using a language model, assigns unique IDs, and stores the results in the graph database. It also links the chunks sequentially within the document.
+    
+    Args:
+        text: The full text content to process.
+        document_name: Unique identifier for the document in the graph.
+        chunk_size: Maximum number of tokens per chunk.
+        chunk_overlap: Number of overlapping tokens between consecutive chunks.
+    """
     start = datetime.now()
     print(f"Started extraction at: {start}")
     text_splitter = TokenTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -211,12 +244,25 @@ MERGE (start)-[:NEXT]->(end)
     print(f"Finished import at: {datetime.now() - start}")
 
 def num_tokens_from_string(string: str) -> int:
-    """Returns the number of tokens in a text string."""
+    """
+    Calculates the number of tokens in a text string using the GPT-4 tokenizer.
+    
+    Args:
+        string: The input text to be tokenized.
+    
+    Returns:
+        The number of tokens in the input string as determined by the GPT-4 tokenizer.
+    """
     encoding = tiktoken.encoding_for_model("gpt-4")
     num_tokens = len(encoding.encode(string))
     return num_tokens
 
 async def main():
+    """
+    Runs the document processing pipeline on the loaded text with specified chunking parameters.
+    
+    This function asynchronously processes the input text by extracting atomic facts and key elements, then imports the structured data into the Neo4j graph database.
+    """
     await process_document(text, text[:10], chunk_size=1000, chunk_overlap=200)
 
 if __name__ == "__main__":

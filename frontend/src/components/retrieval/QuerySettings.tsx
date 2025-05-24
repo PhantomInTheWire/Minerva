@@ -16,6 +16,11 @@ import {
 import { useSettingsStore } from '@/stores/settings'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * Renders a configurable UI panel for adjusting query parameters.
+ *
+ * Displays a card containing input controls for query mode, response format, numeric limits, keyword lists, and toggle options. All settings are synchronized with a global store and support localization.
+ */
 export default function QuerySettings() {
   const { t } = useTranslation()
   const querySettings = useSettingsStore((state) => state.querySettings)

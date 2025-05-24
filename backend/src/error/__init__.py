@@ -5,6 +5,13 @@ from fastapi import HTTPException
 class MinervaError(Exception):
     """Base error class for all Minerva application errors."""
     def __init__(self, message: str, details: Dict[str, Any] = None):
+        """
+        Initializes a MinervaError with a message and optional details.
+        
+        Args:
+            message: A descriptive error message.
+            details: Optional dictionary containing additional error context.
+        """
         self.message = message
         self.details = details or {}
         super().__init__(self.message)
@@ -12,6 +19,13 @@ class MinervaError(Exception):
 class APIError(MinervaError):
     """Base class for all API errors"""
     def __init__(self, message: str, original_error: Exception = None):
+        """
+        Initializes an APIError with a message and an optional original exception.
+        
+        Args:
+            message: Description of the API error.
+            original_error: The underlying exception that caused this error, if any.
+        """
         super().__init__(message, {"original_error": str(original_error) if original_error else None})
         self.original_error = original_error
 
@@ -64,7 +78,11 @@ class InvalidFileTypeError(ValidationError):
     pass
 
 def format_error_response(error: Exception) -> Dict[str, Any]:
-    """Formats an error into a consistent API response structure."""
+    """
+    Formats an exception into a standardized dictionary for API error responses.
+    
+    If the exception is a MinervaError, includes its message and details; otherwise, returns the string representation of the error.
+    """
     if isinstance(error, MinervaError):
         return {
             "status": "error",
@@ -77,10 +95,26 @@ def format_error_response(error: Exception) -> Dict[str, Any]:
     }
 
 def handle_api_errors(endpoint):
-    """Decorator to handle API errors and convert them to HTTP responses."""
+    """
+    Decorator for asynchronous API endpoints that converts custom API errors into HTTP exceptions.
+    
+    Wraps an async endpoint function, catching `APIError` subclasses and raising `fastapi.HTTPException` with an appropriate status code:
+    - 404 for `DocumentNotFoundError`
+    - 400 for `InvalidFileTypeError` and `ConverterInitializationError`
+    - 503 for `FileProcessingError` and `DatabaseCommitError`
+    - 500 for other `APIError` instances
+    
+    The original exception is preserved as the cause of the HTTP exception.
+    """
 
     @wraps(endpoint)
     async def wrapper(*args, **kwargs):
+        """
+        Wraps an asynchronous API endpoint to convert Minerva API errors into HTTP exceptions.
+        
+        Catches API-related exceptions and raises a FastAPI HTTPException with an appropriate
+        status code and error message based on the specific error type.
+        """
         try:
             return await endpoint(*args, **kwargs)
         except APIError as e:

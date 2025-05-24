@@ -138,7 +138,9 @@ const LabeledNumberInput = ({
 }
 
 /**
- * Component that displays a popover with settings options.
+ * Renders a popover-based settings panel for configuring graph visualization and interaction options.
+ *
+ * The panel provides toggles and numeric inputs for features such as property panel visibility, node and edge labels, node dragging, edge events, health checks, edge size range, query depth, node limits, and layout iterations. All settings are synchronized with a global store and support localization.
  */
 export default function Settings() {
   const [opened, setOpened] = useState<boolean>(false)

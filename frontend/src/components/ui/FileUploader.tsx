@@ -109,6 +109,13 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   description?: string
 }
 
+/**
+ * Converts a byte value into a human-readable string with optional decimal precision and size unit type.
+ *
+ * @param bytes - The number of bytes to format.
+ * @param opts - Optional settings for decimal places and size unit type.
+ * @returns A formatted string representing the byte value in appropriate units (e.g., "1.5 MB" or "1.5 MiB").
+ */
 function formatBytes(
   bytes: number,
   opts: {
@@ -127,6 +134,17 @@ function formatBytes(
   }`
 }
 
+/**
+ * Renders a file uploader component with drag-and-drop support, file validation, progress display, and error handling.
+ *
+ * Allows users to select or drag files for upload, enforcing restrictions on file type, size, and count. Displays previews, upload progress, and error messages for each file. Supports both controlled and uncontrolled file state, and provides callbacks for file changes, uploads, and rejections.
+ *
+ * @param props - Configuration options for accepted file types, size limits, file count, callbacks, and UI customization.
+ *
+ * @returns A React component for uploading and managing files with validation and progress feedback.
+ *
+ * @remark Preview URLs for files are automatically revoked on component unmount to prevent memory leaks.
+ */
 function FileUploader(props: FileUploaderProps) {
   const { t } = useTranslation()
   const {
@@ -375,6 +393,12 @@ interface ProgressProps {
   showIcon?: boolean  // New property to control icon display
 }
 
+/**
+ * Displays a horizontal progress bar indicating completion percentage, with optional error styling.
+ *
+ * @param value - The progress percentage to display (0–100).
+ * @param error - If true, displays the progress bar in an error color.
+ */
 function Progress({ value, error }: ProgressProps) {
   return (
     <div className="relative h-2 w-full">
@@ -398,6 +422,14 @@ interface FileCardProps {
   error?: string
 }
 
+/**
+ * Displays a file entry with its name, size, preview or icon, upload progress, error message, and a remove button.
+ *
+ * @param file - The file to display, optionally with a preview URL.
+ * @param progress - The upload progress percentage for the file.
+ * @param error - An optional error message to display for the file.
+ * @param onRemove - Callback invoked when the remove button is clicked.
+ */
 function FileCard({ file, progress, error, onRemove }: FileCardProps) {
   const { t } = useTranslation()
   return (
@@ -435,6 +467,12 @@ function FileCard({ file, progress, error, onRemove }: FileCardProps) {
   )
 }
 
+/**
+ * Determines whether a file object includes a preview URL.
+ *
+ * @param file - The file to check.
+ * @returns True if the file has a string `preview` property; otherwise, false.
+ */
 function isFileWithPreview(file: File): file is File & { preview: string } {
   return 'preview' in file && typeof file.preview === 'string'
 }
@@ -443,6 +481,11 @@ interface FilePreviewProps {
   file: File & { preview: string }
 }
 
+/**
+ * Renders a preview for a file, displaying an image container if the file is an image, or a file icon otherwise.
+ *
+ * @param file - The file to preview.
+ */
 function FilePreview({ file }: FilePreviewProps) {
   if (file.type.startsWith('image/')) {
     return <div className="aspect-square shrink-0 rounded-md object-cover" />

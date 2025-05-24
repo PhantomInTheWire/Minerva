@@ -59,6 +59,31 @@ export interface AsyncSearchProps<T> {
   clearable?: boolean
 }
 
+/**
+ * Renders an asynchronous, searchable dropdown component with customizable option rendering and fetching logic.
+ *
+ * The dropdown supports debounced search input, loading and error states, client-side filtering, and preloading of options. Options can be rendered and identified using custom functions. The component manages its own open/close state and handles outside clicks to close the dropdown. Selection and focus events are exposed via callbacks.
+ *
+ * @template T - The type of each option in the dropdown.
+ *
+ * @param fetcher - Asynchronous function to fetch options based on a search query.
+ * @param preload - If true, preloads all options and filters client-side; otherwise, fetches on demand.
+ * @param filterFn - Optional function to filter options client-side when preloading.
+ * @param renderOption - Function to render each option in the dropdown.
+ * @param getOptionValue - Function to extract the unique value string from an option.
+ * @param notFound - Optional custom element to display when no options are found.
+ * @param loadingSkeleton - Optional custom loading skeleton to display while loading.
+ * @param label - Label for the dropdown, used in empty state messaging.
+ * @param placeholder - Placeholder text for the search input.
+ * @param value - The current selected value.
+ * @param onChange - Callback invoked when an option is selected.
+ * @param onFocus - Callback invoked when an option is focused.
+ * @param disabled - If true, disables the dropdown.
+ * @param className - Optional class name for the root element.
+ * @param noResultsMessage - Optional custom message to display when no results are found.
+ *
+ * @returns The rendered asynchronous searchable dropdown component.
+ */
 export function AsyncSearch<T>({
   fetcher,
   preload,
@@ -224,6 +249,11 @@ export function AsyncSearch<T>({
   )
 }
 
+/**
+ * Displays a placeholder skeleton UI for loading dropdown options.
+ *
+ * Used as a default loading indicator in the asynchronous search dropdown when options are being fetched.
+ */
 function DefaultLoadingSkeleton() {
   return (
     <CommandGroup>

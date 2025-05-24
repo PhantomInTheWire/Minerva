@@ -4,6 +4,11 @@ import { Button } from "@/components/ui";
 import { motion } from "framer-motion";
 import { PRICES } from "./data";
 
+/**
+ * Renders the animated pricing section with multiple pricing plans and features.
+ *
+ * Displays a heading, a descriptive paragraph, and a set of pricing cards with animated fade-in effects. Each card presents a plan's title, price, description, feature list, and a call-to-action button, with styling that highlights the primary plan.
+ */
 export default function Pricing() {
   return (
     <>

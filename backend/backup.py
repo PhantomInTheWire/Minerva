@@ -9,7 +9,12 @@ import hashlib
 class Neo4jToPostgresBackup:
     def __init__(self, neo4j_uri, neo4j_user, neo4j_password,
                  pg_host, pg_database, pg_user, pg_password, pg_port=5432):
-        self.neo4j_driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
+        """
+                 Initializes connections to Neo4j and PostgreSQL databases for backup operations.
+                 
+                 Establishes a Neo4j driver and a PostgreSQL connection with an active cursor using the provided connection parameters.
+                 """
+                 self.neo4j_driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
         self.pg_conn = psycopg2.connect(
             host=pg_host,
             database=pg_database,
@@ -20,7 +25,11 @@ class Neo4jToPostgresBackup:
         self.pg_cursor = self.pg_conn.cursor()
 
     def setup_postgres_schema(self):
-        """Create 3NF compliant schema in PostgreSQL"""
+        """
+        Creates a normalized (3NF) schema in PostgreSQL for backing up Neo4j data.
+        
+        Drops existing backup-related tables if they exist, then creates tables for node types, relationship types, nodes, node-type mappings, property keys, node properties, relationships, and relationship properties, establishing appropriate primary and foreign key constraints. Commits the schema changes to the database.
+        """
         # Drop existing tables if they exist (in correct order)
         drop_tables = [
             "DROP TABLE IF EXISTS relationship_properties CASCADE",
@@ -102,7 +111,17 @@ class Neo4jToPostgresBackup:
         self.pg_conn.commit()
 
     def get_or_create_type_id(self, type_name, type_table, name_column):
-        """Helper function to get or create type IDs"""
+        """
+        Retrieves the ID for a given type from the specified table, inserting it if it does not exist.
+        
+        Args:
+            type_name: The name of the type to look up or insert.
+            type_table: The table in which to search or insert the type.
+            name_column: The column name representing the type's name.
+        
+        Returns:
+            The unique ID of the type from the specified table.
+        """
         self.pg_cursor.execute(f"""
             INSERT INTO {type_table} ({name_column})
             VALUES (%s)
@@ -113,7 +132,15 @@ class Neo4jToPostgresBackup:
         return self.pg_cursor.fetchone()[0]
 
     def get_or_create_property_key_id(self, key_name):
-        """Get or create property key ID"""
+        """
+        Retrieves the ID of a property key from the database, inserting it if it does not exist.
+        
+        Args:
+            key_name: The name of the property key to retrieve or create.
+        
+        Returns:
+            The unique ID of the property key.
+        """
         self.pg_cursor.execute("""
             INSERT INTO property_keys (key_name)
             VALUES (%s)
@@ -124,7 +151,11 @@ class Neo4jToPostgresBackup:
         return self.pg_cursor.fetchone()[0]
 
     def backup_nodes(self):
-        """Extract all nodes from Neo4j and store them in 3NF PostgreSQL schema"""
+        """
+        Backs up all nodes from the Neo4j database into the normalized PostgreSQL schema.
+        
+        For each node, inserts or updates its record in the `nodes` table with a backup timestamp, maps its labels to type IDs in `node_types` and records these in `node_type_mappings`, and stores all properties in `node_properties`. Commits all changes after processing.
+        """
         with self.neo4j_driver.session() as session:
             query = """
                 MATCH (n)
@@ -168,7 +199,11 @@ class Neo4jToPostgresBackup:
             self.pg_conn.commit()
 
     def backup_relationships(self):
-        """Extract all relationships from Neo4j and store them in 3NF PostgreSQL schema"""
+        """
+        Backs up all relationships from Neo4j into the PostgreSQL schema in 3NF format.
+        
+        Extracts all relationships from the Neo4j database, including their IDs, types, start and end nodes, and properties. Each relationship and its properties are inserted or updated in the corresponding PostgreSQL tables, ensuring type and property key references are maintained. Commits all changes after processing.
+        """
         with self.neo4j_driver.session() as session:
             query = """
                 MATCH ()-[r]->()
@@ -218,7 +253,11 @@ class Neo4jToPostgresBackup:
             self.pg_conn.commit()
 
     def perform_backup(self):
-        """Execute the complete backup process"""
+        """
+        Performs a full backup from Neo4j to PostgreSQL using a normalized schema.
+        
+        This method sets up the PostgreSQL schema, transfers all nodes and relationships from the Neo4j database, and ensures proper cleanup of resources. If an error occurs during the process, the PostgreSQL transaction is rolled back.
+        """
         try:
             print("Setting up PostgreSQL schema...")
             self.setup_postgres_schema()
@@ -238,7 +277,9 @@ class Neo4jToPostgresBackup:
             self.cleanup()
 
     def cleanup(self):
-        """Close all database connections"""
+        """
+        Closes all open connections to PostgreSQL and Neo4j.
+        """
         self.pg_cursor.close()
         self.pg_conn.close()
         self.neo4j_driver.close()

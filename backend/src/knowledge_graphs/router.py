@@ -9,13 +9,13 @@ knowledge_graph_router = APIRouter()
 @handle_api_errors
 async def markdown_to_neo4j_kg(markdown_string: str):
     """
-    Processes a markdown string, extracts knowledge using iText2KG, and adds it to a local Neo4j graph database.
-
+    Creates a knowledge graph from a markdown string and integrates it into a local Neo4j database.
+    
     Args:
-        markdown_string: The markdown content to process, sent in request body.
-
+        markdown_string: Markdown content to be processed and converted into a knowledge graph.
+    
     Returns:
-        dict: Status and message indicating success or failure.
+        A dictionary with status and message indicating successful creation and integration of the knowledge graph.
     """
     service = KnowledgeGraphService()
     logger.success(await service.create_knowledge_graph(markdown_string))
@@ -24,10 +24,11 @@ async def markdown_to_neo4j_kg(markdown_string: str):
 @knowledge_graph_router.get("/graph")
 @handle_api_errors
 async def get_graph():
-    """Retrieves the entire knowledge graph from Neo4j database.
-
+    """
+    Retrieves the complete knowledge graph from the Neo4j database.
+    
     Returns:
-        dict: Contains nodes and relationships of the graph.
+        dict: A dictionary containing all nodes and relationships in the graph.
     """
     service = KnowledgeGraphService()
     return await service.get_entire_graph()

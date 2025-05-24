@@ -3,7 +3,11 @@
 import { motion } from "framer-motion";
 import { ScrollAnimatedContainer, MovingLogos } from "@/components/ui";
 import { UNIVERSITIES } from "../data";
-// import Text from "./Text";
+/**
+ * Displays the landing page introduction section with an animated product demo video and a scrolling list of university logos.
+ *
+ * Includes animated transitions for both the video and the logos section, enhancing visual engagement as users scroll into view.
+ */
 
 export default function Introduction() {
   return (

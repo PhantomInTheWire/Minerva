@@ -3,6 +3,11 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui";
 
+/**
+ * Renders an animated call-to-action section encouraging users to start learning by uploading content.
+ *
+ * The section fades in with a smooth opacity transition when it enters the viewport and includes a heading, descriptive text, and a prominent "Get Started" button.
+ */
 export default function CallToValue() {
   return (
     <motion.div

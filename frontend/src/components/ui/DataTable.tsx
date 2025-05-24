@@ -14,6 +14,14 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
+/**
+ * Renders a generic data table with customizable columns and data using the TanStack React Table library.
+ *
+ * Displays a table header and body, rendering each cell with the provided column definitions. If no data is present, shows a "No results." message spanning all columns.
+ *
+ * @param columns - Array of column definitions describing how to render each column.
+ * @param data - Array of data objects to display in the table.
+ */
 export default function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,

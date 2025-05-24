@@ -5,10 +5,21 @@ from .db_manager import Neo4jConnectionManager
 
 class KnowledgeGraphRepository:
     def __init__(self):
+        """
+        Initializes the KnowledgeGraphRepository with a Neo4j connection manager.
+        """
         self.db_manager = Neo4jConnectionManager()
 
     def get_entire_graph(self):
-        """Retrieve the entire knowledge graph from Neo4j."""
+        """
+        Retrieves all nodes and relationships from the Neo4j knowledge graph.
+        
+        Returns:
+            dict: A dictionary with two keys, "nodes" and "relationships", each containing a list of all nodes and relationships in the graph, including their IDs, labels/types, properties, and connection details.
+        
+        Raises:
+            KnowledgeGraphError: If an error occurs while fetching the graph from the database.
+        """
         try:
             driver = self.db_manager.get_driver()
             with driver.session() as session:

@@ -38,6 +38,13 @@ interface ClearDocumentsDialogProps {
   onDocumentsCleared?: () => Promise<void>
 }
 
+/**
+ * Displays a dialog for clearing all documents, with an option to also clear cache, requiring user confirmation before proceeding.
+ *
+ * Presents a confirmation input where the user must type "yes" to enable the destructive action. Optionally, the user can select to clear cache after documents are cleared. Shows localized success or error notifications based on the outcome. Invokes an optional callback after successful clearing to allow parent components to refresh state.
+ *
+ * @param onDocumentsCleared - Optional callback invoked after documents are successfully cleared.
+ */
 export default function ClearDocumentsDialog({ onDocumentsCleared }: ClearDocumentsDialogProps) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)

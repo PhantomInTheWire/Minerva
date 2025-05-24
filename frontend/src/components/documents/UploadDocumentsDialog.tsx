@@ -21,6 +21,13 @@ interface UploadDocumentsDialogProps {
   onDocumentsUploaded?: () => Promise<void>
 }
 
+/**
+ * Displays a dialog for uploading multiple documents with progress tracking and error handling.
+ *
+ * Allows users to select and upload files, providing real-time progress updates and user-friendly error messages for each file. Supports concurrent uploads, handles duplicate and unsupported files, and notifies users of overall upload status. Optionally invokes a callback after successful uploads to refresh the document list.
+ *
+ * @param onDocumentsUploaded - Optional callback invoked after at least one document is uploaded successfully.
+ */
 export default function UploadDocumentsDialog({ onDocumentsUploaded }: UploadDocumentsDialogProps) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)

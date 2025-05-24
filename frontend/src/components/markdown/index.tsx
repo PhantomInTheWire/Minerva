@@ -15,6 +15,13 @@ import {
 } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "./styles.css";
 
+/**
+ * Renders a live Markdown editor with a split view for editing and previewing Markdown, including syntax-highlighted code blocks, math rendering, and copy-to-clipboard functionality.
+ *
+ * The left pane provides a textarea for Markdown input, while the right pane displays a rendered preview supporting GitHub Flavored Markdown, math via KaTeX, and syntax-highlighted code blocks with language labels and copy buttons.
+ *
+ * @param theme - Optional color theme for syntax highlighting and UI, either "light" or "dark" (defaults to "dark").
+ */
 export default function MarkdownRenderer(props: { theme?: "light" | "dark" }) {
   const [markdownInput, setMarkdownInput] = useState<string>("");
   const theme = props.theme ?? "dark";

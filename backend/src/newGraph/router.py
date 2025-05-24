@@ -25,6 +25,11 @@ newGraph = APIRouter()
 
 @newGraph.post("/new")
 async def new(text):
+    """
+    Processes input text to extract atomic facts and key elements, storing them in a Neo4j graph.
+    
+    This endpoint ingests a long text document, splits it into manageable chunks, and uses a language model to extract structured atomic facts and key elements from each chunk. The extracted information is parsed, assigned unique identifiers, and imported into a Neo4j graph database with relationships linking documents, chunks, atomic facts, and key elements. Uniqueness constraints are ensured for all relevant node types.
+    """
     os.environ["NEO4J_URI"] = "bolt://localhost:7687"
     os.environ["NEO4J_USERNAME"] = "neo4j"
     os.environ["NEO4J_PASSWORD"] = "your_password_here"
@@ -100,6 +105,14 @@ async def new(text):
 
     class CustomOutputParser(BaseOutputParser):
         def parse(self, text):
+            """
+            Parses text output from a language model to extract atomic facts and key elements in JSON format.
+            
+            Attempts to locate and parse a JSON object from the input text. If no valid JSON is found, falls back to parsing bullet-point or colon-separated lines to construct the expected structure. Handles common formatting issues and ensures the result contains an "atomic_facts" array. Raises a ValueError if parsing fails.
+            
+            Returns:
+                A JSON string representing the extracted atomic facts and key elements.
+            """
             try:
                 import re
                 import json
@@ -153,6 +166,11 @@ async def new(text):
                 raise ValueError(f"Failed to parse output: {str(e)}")
 
         def get_format_instructions(self):
+            """
+            Returns an empty string as format instructions.
+            
+            This method can be overridden to provide specific formatting guidance for output generation.
+            """
             return ""
 
     custom_parser = CustomOutputParser()
@@ -160,6 +178,15 @@ async def new(text):
     construction_chain = construction_prompt | model | custom_parser | parser
 
     def encode_md5(text):
+        """
+        Returns the MD5 hash of the given text as a hexadecimal string.
+        
+        Args:
+            text: The input string to hash.
+        
+        Returns:
+            The hexadecimal MD5 hash of the input text.
+        """
         return md5(text.encode("utf-8")).hexdigest()
 
     import_query = """
@@ -183,6 +210,17 @@ async def new(text):
     """
 
     async def process_document(text, document_name, chunk_size=4000, chunk_overlap=200):
+        """
+        Processes a text document by extracting atomic facts and key elements, then imports them into the Neo4j graph database.
+        
+        Splits the input text into overlapping chunks, uses a language model to extract structured atomic facts and key elements from each chunk, assigns unique identifiers, and stores the results in the graph database with appropriate relationships. Also establishes sequential links between chunk nodes.
+        
+        Args:
+            text: The input document text to process.
+            document_name: Unique identifier for the document in the graph.
+            chunk_size: Maximum number of characters per chunk (default: 4000).
+            chunk_overlap: Number of overlapping characters between chunks (default: 200).
+        """
         start = datetime.now()
         print(f"Started extraction at: {start}")
         text_splitter = TokenTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
@@ -214,7 +252,15 @@ async def new(text):
         print(f"Finished import at: {datetime.now() - start}")
 
     def num_tokens_from_string(string: str) -> int:
-        """Returns the number of tokens in a text string."""
+        """
+        Calculates the number of tokens in a given text string using GPT-4 encoding.
+        
+        Args:
+            string: The input text to be tokenized.
+        
+        Returns:
+            The number of tokens in the input string as determined by GPT-4's tokenizer.
+        """
         encoding = tiktoken.encoding_for_model("gpt-4")
         num_tokens = len(encoding.encode(string))
         return num_tokens
@@ -223,6 +269,17 @@ async def new(text):
 
 @newGraph.get("/response")
 async def get_response(question):
+    """
+    Answers a user question by reasoning over a knowledge graph constructed from previously ingested text.
+    
+    This function orchestrates a multi-step, graph-based reasoning process to answer questions using information stored in a Neo4j knowledge graph. It generates a rational plan, selects relevant nodes, explores atomic facts and text chunks, traverses neighbors as needed, and synthesizes a final answer by iteratively invoking large language models and graph queries. The process is managed as a state graph, enabling dynamic exploration and reasoning over the structured knowledge extracted from the source text.
+    
+    Args:
+        question: The user question to be answered.
+    
+    Returns:
+        A dictionary containing the final answer, an analysis of the reasoning process, and a list of actions taken during the reasoning steps.
+    """
     class InputState(TypedDict):
         question: str
 
@@ -258,6 +315,15 @@ async def get_response(question):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
 
     def parse_function(input_str):
+        """
+        Parses a string representing a function call and extracts the function name and arguments.
+        
+        Args:
+            input_str: A string in the format 'function_name(arg1, arg2, ...)' or 'function_name'.
+        
+        Returns:
+            A dictionary with 'function_name' and a list of 'arguments', or None if parsing fails.
+        """
         pattern = r'(\w+)(?:\((.*)\))?'
 
         match = re.match(pattern, input_str)
@@ -310,6 +376,11 @@ async def get_response(question):
     rational_chain = rational_prompt | model | StrOutputParser()
 
     def rational_plan_node(state: InputState) -> OverallState:
+        """
+        Generates a rational plan for answering the input question.
+        
+        Invokes the language model chain to create a step-by-step reasoning plan based on the provided question and returns the updated state with the rational plan, an empty notebook, and the action history.
+        """
         rational_plan = rational_chain.invoke({"question": state.get("question")})
         print("-" * 20)
         print(f"Step: rational_plan")
@@ -330,6 +401,15 @@ async def get_response(question):
     )
 
     def get_potential_nodes(question: str) -> List[str]:
+        """
+        Performs a similarity search on the Neo4j vector store to find key elements relevant to the question.
+        
+        Args:
+            question: The input question to search for relevant key elements.
+        
+        Returns:
+            A list of key element texts most similar to the question.
+        """
         data = neo4j_vector.similarity_search(question, k=50)
         print(f"Similarity search results: {data}")
         return [el.page_content for el in data]
@@ -390,6 +470,15 @@ async def get_response(question):
     initial_nodes_chain = initial_node_prompt | model | StrOutputParser()
 
     def get_atomic_facts(key_elements: List[str]) -> List[Dict[str, str]]:
+        """
+        Retrieves atomic facts associated with the specified key elements from the Neo4j graph.
+        
+        Args:
+            key_elements: List of key element IDs to search for.
+        
+        Returns:
+            A list of dictionaries, each containing the chunk ID and atomic fact text linked to the provided key elements.
+        """
         data = neo4j_vector.query("""
         MATCH (k:KeyElement)<-[:HAS_KEY_ELEMENT]-(fact)<-[:HAS_ATOMIC_FACT]-(chunk)
         WHERE k.id IN $key_elements
@@ -398,6 +487,14 @@ async def get_response(question):
         return data
 
     def initial_node_selection(state: OverallState) -> OverallState:
+        """
+        Selects and ranks initial relevant key elements from the knowledge graph for question answering.
+        
+        Given the current state containing the user's question and rational plan, this function retrieves potential key elements from the graph, uses a language model to score their relevance, and selects the top candidates to initialize the atomic fact checking queue.
+        
+        Returns:
+            Updated state with the `check_atomic_facts_queue` populated with up to five most relevant key elements.
+        """
         potential_nodes = get_potential_nodes(state.get("question"))
         print(f"Potential nodes: {potential_nodes}")
         initial_nodes_output = initial_nodes_chain.invoke(
@@ -504,6 +601,15 @@ async def get_response(question):
     atomic_fact_check_chain = atomic_fact_check_prompt | model.with_structured_output(AtomicFactOutput)
 
     def get_neighbors_by_key_element(key_elements):
+        """
+        Retrieves IDs of neighbor key elements in the Neo4j graph that are connected to the given key elements.
+        
+        Args:
+            key_elements: List of key element IDs to find neighbors for.
+        
+        Returns:
+            A list of neighbor key element IDs not present in the input list, ordered by connection count.
+        """
         print(f"Key elements: {key_elements}")
         data = neo4j_vector.query("""
         MATCH (k:KeyElement)<-[:HAS_KEY_ELEMENT]-()-[:HAS_KEY_ELEMENT]->(neighbor)
@@ -515,6 +621,15 @@ async def get_response(question):
         return data
 
     def get_atomic_facts(key_elements: List[str]) -> List[Dict[str, str]]:
+        """
+        Retrieves atomic facts associated with the specified key elements from the Neo4j graph.
+        
+        Args:
+            key_elements: List of key element IDs to search for.
+        
+        Returns:
+            A list of dictionaries, each containing a chunk ID and the corresponding atomic fact text.
+        """
         data = neo4j_vector.query("""
         MATCH (k:KeyElement)<-[:HAS_KEY_ELEMENT]-(fact)<-[:HAS_ATOMIC_FACT]-(chunk)
         WHERE k.id IN $key_elements
@@ -523,6 +638,17 @@ async def get_response(question):
         return data
 
     def initial_node_selection(state: OverallState) -> OverallState:
+        """
+        Selects the most relevant initial key elements from the knowledge graph for question answering.
+        
+        Given the current state containing the question and rational plan, this function retrieves potential key elements from the graph, ranks them by relevance using a language model, and selects the top candidates to initialize the atomic fact checking queue.
+        
+        Args:
+            state: The current state dictionary containing at least the question and rational plan.
+        
+        Returns:
+            An updated state dictionary with the `check_atomic_facts_queue` populated with up to five top-ranked key elements and `previous_actions` updated to include this selection step.
+        """
         potential_nodes = get_potential_nodes(state.get("question"))
         print(f"Potential nodes: {potential_nodes}")
         initial_nodes_output = initial_nodes_chain.invoke(
@@ -566,6 +692,17 @@ async def get_response(question):
         }
 
     def atomic_fact_check(state: OverallState) -> OverallState:
+        """
+        Performs an atomic fact check to determine the next reasoning step in the question answering process.
+        
+        Examines atomic facts associated with the current queue, updates the notebook with new information, and uses a language model to decide whether to read related text chunks or explore neighboring nodes. Updates the state with the chosen action and relevant queues for subsequent processing.
+        
+        Args:
+            state: The current reasoning state, including the question, rational plan, notebook, and queues.
+        
+        Returns:
+            An updated state reflecting the notebook, chosen action, and updated queues for further reasoning steps.
+        """
         atomic_facts = get_atomic_facts(state.get("check_atomic_facts_queue"))
         print("-" * 20)
         print(f"Step: atomic_fact_check")
@@ -673,6 +810,15 @@ async def get_response(question):
     chunk_read_chain = chunk_read_prompt | model.with_structured_output(ChunkOutput)
 
     def get_subsequent_chunk_id(chunk):
+        """
+        Retrieves the ID of the chunk that directly follows the given chunk in the graph.
+        
+        Args:
+            chunk: The chunk node whose subsequent chunk ID is to be retrieved.
+        
+        Returns:
+            The ID of the next chunk if it exists, otherwise None.
+        """
         data = graph.query("""
         MATCH (c:Chunk)-[:NEXT]->(next)
         WHERE c.id = $id
@@ -681,6 +827,15 @@ async def get_response(question):
         return data
 
     def get_previous_chunk_id(chunk):
+        """
+        Retrieves the ID of the chunk that precedes the given chunk in the graph.
+        
+        Args:
+            chunk: The chunk node whose previous chunk ID is to be retrieved.
+        
+        Returns:
+            The ID of the previous chunk, or None if no previous chunk exists.
+        """
         data = graph.query("""
         MATCH (c:Chunk)<-[:NEXT]-(previous)
         WHERE c.id = $id
@@ -689,6 +844,15 @@ async def get_response(question):
         return data
 
     def get_chunk(chunk_id: str) -> List[Dict[str, str]]:
+        """
+        Retrieves the text and ID of a chunk from the Neo4j database by its chunk ID.
+        
+        Args:
+            chunk_id: The unique identifier of the chunk to retrieve.
+        
+        Returns:
+            A list of dictionaries containing the chunk's ID and text.
+        """
         data = neo4j_vector.query("""
         MATCH (c:Chunk)
         WHERE c.id = $chunk_id
@@ -697,6 +861,17 @@ async def get_response(question):
         return data
 
     def chunk_check(state: OverallState) -> OverallState:
+        """
+        Processes the next chunk in the chunk check queue, updates the notebook with extracted information, and determines the next action in the reasoning workflow.
+        
+        Examines the specified chunk, invokes the language model to analyze its relevance to the question, and updates the state based on the model's suggested next step. Depending on the chosen action, it may enqueue subsequent or previous chunks for further reading, initiate a neighbor search, or continue processing remaining chunks.
+        
+        Args:
+            state: The current reasoning state, including queues, notebook, and previous actions.
+        
+        Returns:
+            The updated state reflecting the notebook, chosen action, updated queues, and any new neighbor exploration tasks.
+        """
         check_chunks_queue = state.get("check_chunks_queue")
         chunk_id = check_chunks_queue.pop()
         print("-" * 20)
@@ -812,6 +987,11 @@ async def get_response(question):
     neighbor_select_chain = neighbor_select_prompt | model.with_structured_output(NeighborOutput)
 
     def neighbor_select(state: OverallState) -> OverallState:
+        """
+        Determines the next action after evaluating neighbor nodes during question answering.
+        
+        Examines the current neighbor check queue and, using a language model chain, decides whether to read a neighbor node or terminate exploration. Updates the state accordingly by clearing the neighbor check queue and, if a neighbor is selected, adding it to the atomic facts check queue.
+        """
         print("-" * 20)
         print(f"Step: neighbor select")
         print(f"Possible candidates: {state.get('neighbor_check_queue')}")
@@ -912,6 +1092,11 @@ async def get_response(question):
     answer_reasoning_chain = answer_reasoning_prompt | model.with_structured_output(AnswerReasonOutput)
 
     def answer_reasoning(state: OverallState) -> OutputState:
+        """
+        Produces a final answer and analysis by reasoning over the accumulated notebook information.
+        
+        Invokes the answer reasoning chain with the question and notebook from the current state. Returns the generated answer, analysis, and an updated list of previous actions. If the reasoning chain fails or returns no result, provides a fallback response with error details.
+        """
         print("-" * 20)
         print("Step: Answer Reasoning")
 
@@ -948,7 +1133,14 @@ async def get_response(question):
     def atomic_fact_condition(
             state: OverallState,
     ) -> Literal["neighbor_select", "chunk_check"]:
-        if state.get("chosen_action") == "stop_and_read_neighbor":
+        """
+            Determines the next state transition based on the chosen action in the current state.
+            
+            Returns:
+                "neighbor_select" if the chosen action is to stop and read a neighbor node, or
+                "chunk_check" if the chosen action is to read a chunk.
+            """
+            if state.get("chosen_action") == "stop_and_read_neighbor":
             return "neighbor_select"
         elif state.get("chosen_action") == "read_chunk":
             return "chunk_check"
@@ -956,7 +1148,16 @@ async def get_response(question):
     def chunk_condition(
             state: OverallState,
     ) -> Literal["answer_reasoning", "chunk_check", "neighbor_select"]:
-        if state.get("chosen_action") == "termination":
+        """
+            Determines the next node in the state graph based on the chosen action in the current state.
+            
+            Args:
+                state: The current state dictionary containing the 'chosen_action' key.
+            
+            Returns:
+                The name of the next node to transition to: 'answer_reasoning', 'chunk_check', or 'neighbor_select'.
+            """
+            if state.get("chosen_action") == "termination":
             return "answer_reasoning"
         elif state.get("chosen_action") in ["read_subsequent_chunk", "read_previous_chunk", "search_more"]:
             return "chunk_check"
@@ -966,7 +1167,13 @@ async def get_response(question):
     def neighbor_condition(
             state: OverallState,
     ) -> Literal["answer_reasoning", "atomic_fact_check"]:
-        if state.get("chosen_action") == "termination":
+        """
+            Determines the next node in the reasoning workflow based on the chosen action.
+            
+            Returns:
+                "answer_reasoning" if the chosen action is termination, or "atomic_fact_check" if the action is to read a neighbor node.
+            """
+            if state.get("chosen_action") == "termination":
             return "answer_reasoning"
         elif state.get("chosen_action") == "read_neighbor_node":
             return "atomic_fact_check"
