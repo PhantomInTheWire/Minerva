@@ -9,7 +9,7 @@ knowledge_graph_router = APIRouter()
 @handle_api_errors
 async def markdown_to_neo4j_kg(markdown_string: str):
     """
-    Processes a markdown string, extracts knowledge using iText2KG, and adds it to a local Neo4j graph database.
+    Processes a markdown string and adds it to a local Neo4j graph database.
 
     Args:
         markdown_string: The markdown content to process, sent in request body.
